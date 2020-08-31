@@ -71,6 +71,7 @@ fi
 ```
 Now every time a new container instance starts up its attributes will be populated automatically.  
 
+### Conc
 ### Automate the update of Instance attributes (The Hard Way)
 (*Just for fun I wanted to try something different, here I have used a lambda function to update the same attributes.*)  
 Let's create a Cloudwatch event to capture every time a new container instances is registered with our cluster and use a simple lambda function to update the attributes of the container instances.  
@@ -113,3 +114,5 @@ And finally the Cloudwatch event
 The target of the above Cloudwatch event should be the lambda function we created previously.  
 Now every time a new container instance is registered with ECS cluster the Cloudwatch event triggers the lambda function which will update our attribute.  
 
+### Conclusion  
+Amazon ECS task placement constrains are a very powerful feature available to the developers and cluster administrators. Not all attributes for the task placements are available but with custom attributes you can practically apply any constrain that you can think of and there will always be more than one way to it.  
