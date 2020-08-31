@@ -7,6 +7,16 @@
 			{%- assign date_format = site.date_forma | default: "%Y/%m/%d" -%}
 			{{ page.date | date: date_format }}
 		</time>	
+		{% assign author = site[page.author] %}
+		{% if author %}
+		  <span>
+		    Written by {{ author.name }}
+		  </span>
+		{% else %}
+		  <span>
+		    Written by Integra Technologies
+		  </span>
+		{% endif %}
 	</header>
 
 	<div class="post-content">
