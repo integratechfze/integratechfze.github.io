@@ -109,7 +109,7 @@ def lambda_handler(event, context):
 ```
 The IAM role for the lambda function should have update attributes permission on the ECS cluster   
 And finally the Cloudwatch event  
-![cloudwatch-event](/public/img/posts/ecs-custom-constrains-09.png)
+![cloudwatch-event](/public/img/posts/ecs-custom-constrains-09.png)  
 The target of the above Cloudwatch event should be the lambda function we created previously.  
 Now every time a new container instance is registered with ECS cluster the Cloudwatch event triggers the lambda function which will update our attribute.  
 
