@@ -57,7 +57,7 @@ In the task definition of the our service we can add a constrain of type memberO
 
 ### Automate the update of Instance attributes 
 So far so good, but the container instances in our cluster are part of an autoscaling group which means that new instances could be added or removed dynamically and it will be impractical to add these attributes manually every time.  
-We can add custom attributes by update the `/etc/ecs/ecs.config` file. So let's write a script that we can add as part of the user data in the launch template.  
+We can add custom attributes by update the `/etc/ecs/ecs.config` file. Below is a script that I have added into the user data of the my launch template.  
 ```terminal
 #!/bin/bash
 echo ECS_CLUSTER=MyClusterName >> /etc/ecs/ecs.config
@@ -69,10 +69,10 @@ else
   echo 'ECS_INSTANCE_ATTRIBUTES={"LifeCycle": "Spot"}' >> /etc/ecs/ecs.config
 fi
 ```
-Now every time a new container instance starts up its attributes will be updated automatically.  
+Now every time a new container instance starts up its attributes will be populated automatically.  
 
 ### Automate the update of Instance attributes (The Hard Way)
-(*As with anything there is always more than one way to achieve something.*)  
+(*Just for fun I wanted to try something different, here I have used a lambda function to update the same attributes.*)  
 Let's create a Cloudwatch event to capture every time a new container instances is registered with our cluster and use a simple lambda function to update the attributes of the container instances.  
 First the lambda function.  
 ```ruby
