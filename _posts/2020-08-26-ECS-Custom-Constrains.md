@@ -13,7 +13,7 @@ Spot instances are a great way to save compute cost on AWS, you pay as low as 90
 If the ECS cluster was launched using the ECS console with the default setting we may not have the option to add spot instances to our cluster or auto-scale the cluster on spot instances. In order to enable this capability we need to make some modification to our autoscaling group. First we need to convert our launch configuration to a launch template.  
 
 Go to the launch configuration's tab and select the lunch configuration created by our ECS cluster.  
-Click 'Copy to launch template'  
+From 'Actions' click 'Copy to launch template'  
 ![Copy-launch-template](/public/img/posts/ecs-custom-constrains-01.png)
   
 Once the launch template is created we need to update the autoscaling group, with the launch template.  
