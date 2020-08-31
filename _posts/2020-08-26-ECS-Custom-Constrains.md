@@ -60,7 +60,7 @@ So far so good, but the container instances in our cluster are part of an autosc
 We can add custom attributes by update the `/etc/ecs/ecs.config` file. Below is a script that I have added into the user data of the my launch template.  
 ```terminal
 #!/bin/bash
-echo ECS_CLUSTER=MyClusterName >> /etc/ecs/ecs.config
+echo ECS_CLUSTER=ecs-demo >> /etc/ecs/ecs.config
 Instance_lifecycle=$(curl http://169.254.169.254/latest/meta-data/instance-life-cycle)
 if [ $Instance_lifecycle == "on-demand" ]
 then
