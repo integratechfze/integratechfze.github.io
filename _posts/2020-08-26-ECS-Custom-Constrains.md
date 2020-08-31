@@ -36,7 +36,7 @@ While this saves us a lot of cost it also creates a problem, for some critical a
 Go to the ECS console and select the container instance click on 'Action' -> 'View/Edit Attributes'   
 ![ecs-cluster](/public/img/posts/ecs-custom-constrains-06.png)
   
-Under 'Custom attributes' click '<span style="color:blue">Add Attribute</span>' and now you can add a custom attributes for example I am adding the following attribute   
+Under 'Custom attributes' click '<span style="color:blue">Add attribute</span>' and now you can add a custom attributes for example I am adding the following attribute   
 ```
 {  
 	'Name' : 'LifeCycle', 
