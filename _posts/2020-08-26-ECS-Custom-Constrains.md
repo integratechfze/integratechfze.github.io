@@ -1,6 +1,6 @@
 ---
 title: ECS Custom Constraints for Instance Lifecycle 
-author: Hazaq Naeem
+author: hazaq_naeem
 date: 2020-08-26 11:33:00 +0400
 categories: [AWS, ECS, DevOps]
 tags: [Lambda, ECS]
