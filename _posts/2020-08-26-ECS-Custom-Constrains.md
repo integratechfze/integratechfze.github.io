@@ -20,7 +20,7 @@ Once the launch template is created we need to update the autoscaling group, wit
 Select the ECS Autoscaling group and click edit  
 ![Autoscaling-group](/public/img/posts/ecs-custom-constrains-02.png)  
   
-Under the Launch Configuration dialog box click 'Switch to launch template'  
+Under the Launch Configuration dialog box click '<span style="color:blue">Switch to launch template</span>'  
 ![Autoscaling-group-2](/public/img/posts/ecs-custom-constrains-03.png)
 
 Select the launch template that was created in the previous step  
