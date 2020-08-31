@@ -14,27 +14,27 @@ If the ECS cluster was launched using the ECS console with the default setting w
 
 Go to the launch configuration's tab and select the lunch configuration created by our ECS cluster.  
 Click 'Copy to launch template'  
-![Copy-launch-template](/assets/img/posts/ecs-custom-constrains-01.png)
+![Copy-launch-template](/public/img/posts/ecs-custom-constrains-01.png)
   
 Once the launch template is created we need to update the autoscaling group, with the launch template.  
 Select the ECS Autoscaling group and click edit  
-![Autoscaling-group](/assets/img/posts/ecs-custom-constrains-02.png)  
+![Autoscaling-group](/public/img/posts/ecs-custom-constrains-02.png)  
   
 Under the Launch Configuration dialog box click 'Switch to launch template'  
-![Autoscaling-group-2](/assets/img/posts/ecs-custom-constrains-03.png)
+![Autoscaling-group-2](/public/img/posts/ecs-custom-constrains-03.png)
 
 Select the launch template that was created in the previous step  
-![Autoscaling-group-3](/assets/img/posts/ecs-custom-constrains-04.png)
+![Autoscaling-group-3](/public/img/posts/ecs-custom-constrains-04.png)
   
 Now we can select spot instances as part of our ECS cluster  
-![Autoscaling-group-4](/assets/img/posts/ecs-custom-constrains-05.png)
+![Autoscaling-group-4](/public/img/posts/ecs-custom-constrains-05.png)
 
 I have configured my autoscaling group to launch the first 4 EC2 instances to be On-Demand but next 4 EC2 instances will have 1 EC2 (25%) with On-Demand and 3 EC2 (75%) with Spot instances.  
 ### Applying the Custom Attributes
 While this saves us a lot of cost it also creates a problem, for some critical applications where it is not acceptable to interrupt the service if a spot instance is terminated and this can happen quite randomly from few times a day to few times a month. We need to restrict our ECS services to only launch task on On-Demand instances but AWS ECS instances does not have a built in attribute to handle instance lifecycle (On-Demand | Spot). In this case we can use custom attributes, and create a constrain based on custom attribute.  
 
 Go to the ECS console and select the container instance click on 'Action' -> 'View/Edit Attributes'   
-![ecs-cluster](/assets/img/posts/ecs-custom-constrains-06.png)
+![ecs-cluster](/public/img/posts/ecs-custom-constrains-06.png)
   
 Under 'Custom attributes' click 'Add attribute' and an attribute for example I am adding the following attribute   
 ```
@@ -43,7 +43,7 @@ Under 'Custom attributes' click 'Add attribute' and an attribute for example I a
 	'Value' : 'On-Demand' 
 } 
 ```
-![ecs-attribute](/assets/img/posts/ecs-custom-constrains-07.png)  
+![ecs-attribute](/public/img/posts/ecs-custom-constrains-07.png)  
 
 You also use the below aws cli command to add the attribute.  
 ```terminal
@@ -53,7 +53,7 @@ $ aws ecs put-attributes --attributes name=LifeCycle,value=On-Demand,targetId=ar
 Similarly we can tag spot instances with LifeCycle: Spot  
 
 In the task definition of the our service we can add a constrain of type memberOf with the following Expression `attribute:LifeCycle == On-Demand`  
-![ecs-task](/assets/img/posts/ecs-custom-constrains-08.png)  
+![ecs-task](/public/img/posts/ecs-custom-constrains-08.png)  
 
 ### Automate the update of Instance attributes 
 So far so good, but the container instances in our cluster are part of an autoscaling group which means that new instances could be added or removed dynamically and it will be impractical to add these attributes manually every time.  
@@ -109,7 +109,7 @@ def lambda_handler(event, context):
 ```
 The IAM role for the lambda function should have update attributes permission on the ECS cluster   
 And finally the Cloudwatch event  
-![cloudwatch-event](/assets/img/posts/ecs-custom-constrains-09.png)
+![cloudwatch-event](/public/img/posts/ecs-custom-constrains-09.png)
 The target of the above Cloudwatch event should be the lambda function we created previously.  
 Now every time a new container instance is registered with ECS cluster the Cloudwatch event triggers the lambda function which will update our attribute.  
 
