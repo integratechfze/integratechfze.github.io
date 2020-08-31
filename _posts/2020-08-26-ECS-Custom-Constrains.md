@@ -71,7 +71,7 @@ fi
 ```
 Now every time a new container instance starts up its attributes will be populated automatically.  
 
-### Automate the update of Instance attributes (The Hard Way)
+### Automate the update of Instance attributes (<span style="color:red">The Hard Way</span>)
 (*Just for fun I wanted to try something different, here I have used a lambda function to update the same attributes.*)  
 Let's create a Cloudwatch event to capture every time a new container instances is registered with our cluster and use a simple lambda function to update the attributes of the container instances.  
 First the lambda function.  
