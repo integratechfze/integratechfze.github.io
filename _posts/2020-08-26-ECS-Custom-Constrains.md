@@ -6,7 +6,7 @@ categories: [AWS, ECS, DevOps]
 tags: [Lambda, ECS]
 ---
 <br/>
-###Amazon ECS Task Placement Constraints
+### Amazon ECS Task Placement Constraints
 Amazon ECS task placement constraints are a very useful way to handle the placement of containers in an ECS cluster. Task placement constraints are rules that are considered during task placement. We may want to apply these rules to make sure that the task that we are launching are placed on an EC2 instance with the correct Amazon Machine Image (AMI), Operationg System (OS), CPU architecture or the instance type. We may have situations where we are running a heterogenous ECS cluster, for example, a mix of different EC2 instance types and we want to ensure that our tasks run on the correct instance type. In these situations we have to use ECS task placement constraints to ensure that we get the desired task placement. Unfortunately, Amazon ECS provides only a handful of task placement constraint attributes out of the box. However, we can leverage custom attributes to build and apply our own constraints on ECS tasks. In this blog post I will demonstrate, how we can use custom attributes to handle a very common use case of managing tasks to run on the correct instance lifecycle type (On-Demand | Spot).  
 
 <br/>
@@ -25,23 +25,29 @@ Once the launch template is created we need to update the autoscaling group, wit
 Select the ECS Autoscaling group and click Edit  
 <br/>
 ![Autoscaling-group](/public/img/posts/ecs-custom-constrains-02.png)  
-  
+<br/>  
 Under the Launch Configuration dialog box click '<span style="color:blue">Switch to launch template</span>'  
+<br/>
 ![Autoscaling-group-2](/public/img/posts/ecs-custom-constrains-03.png)
-
+<br/>
 Select the launch template that was created in the previous step  
+<br/>
 ![Autoscaling-group-3](/public/img/posts/ecs-custom-constrains-04.png)
-  
+<br/>  
 Now we can select spot instances as part of our ECS cluster  
+<br/>
 ![Autoscaling-group-4](/public/img/posts/ecs-custom-constrains-05.png)
-
+<br/>
 I have configured my autoscaling group to launch the first 4 EC2 instances to be On-Demand but next 4 EC2 instances will have 1 EC2 (25%) with On-Demand and 3 EC2 (75%) with Spot instances.  
+<br/>
 ### Applying the Custom Attributes
+<br/>
 While this saves us a lot of cost it also creates a problem, for some critical applications where it is not acceptable to interrupt the service if a spot instance is terminated and this can happen quite randomly from few times a day to few times a month. We need to restrict our ECS services to only launch task on On-Demand instances but AWS ECS instances does not have a built in attribute to handle instance lifecycle (On-Demand | Spot). In this case we can use custom attributes, and create a constrain based on custom attribute.  
-
+<br/>
 Go to the ECS console and select the container instance click on 'Action' -> 'View/Edit Attributes'   
+<br/>
 ![ecs-cluster](/public/img/posts/ecs-custom-constrains-06.png)
-  
+<br/> 
 Under 'Custom attributes' click '<span style="color:blue">Add attribute</span>' and now you can add a custom attributes for example I am adding the following attribute   
 ```
 {  
@@ -49,15 +55,17 @@ Under 'Custom attributes' click '<span style="color:blue">Add attribute</span>' 
 	'Value' : 'On-Demand' 
 } 
 ```
+<br/>
 ![ecs-attribute](/public/img/posts/ecs-custom-constrains-07.png)  
-
+<br/>
 You also use the below aws cli command to add the attribute.  
+<br/>
 ```terminal
 $ aws ecs put-attributes --attributes name=LifeCycle,value=On-Demand,targetId=arn
 ```
-
+<br/>
 Similarly we can tag spot instances with LifeCycle: Spot  
-
+<br/>
 In the task definition of the our service we can add a constrain of type memberOf with the following Expression `attribute:LifeCycle == On-Demand`  
 ![ecs-task](/public/img/posts/ecs-custom-constrains-08.png)  
 
