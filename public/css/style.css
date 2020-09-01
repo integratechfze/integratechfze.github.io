@@ -136,17 +136,17 @@ code {
 
 .nav-title {
 	font-size: 100%;
-	font-family: "Noto Sans";
-	text-transform: uppercase;
-	border-bottom: 1px solid gray;
+	font-family: "Gudea";
+	/*text-transform: uppercase;*/
+	border-bottom: 1px solid white;
 	margin-bottom: 5px;
 }
 
 a.nav-item {
 	font-size: 120%;
 	font-family: "Noto Sans";
-	text-transform: capitalize;
-	color: #aaa;
+	/*text-transform: capitalize;*/
+	color: #fff;
 }
 
 a.nav-item:hover { color: #777; }
