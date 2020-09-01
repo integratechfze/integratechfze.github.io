@@ -58,12 +58,11 @@ body {
 
 a {
 	text-decoration: none;
-	color: #007bff;
+	color: #cccccc;
 	background-color: transparent;
 }
 
 a:hover {
-	color: #ffffff;
 	text-decoration: underline;
 }
 
