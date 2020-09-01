@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: I N T E G R A
+title:  I N T E G R A
 email: tech@integratech.ae
 description: >- # this means to ignore newlines until "baseurl:"
   A generic blog on opensource and cloud technologies by Integra.
