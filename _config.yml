@@ -21,7 +21,7 @@
 title:  I N T E G R A
 email: tech@integratech.ae
 description: >- # this means to ignore newlines until "baseurl:"
-  A generic blog on opensource and cloud technologies by Integra.
+All things AWS, Linux and Opensource.
 # baseurl: "/" # the subpath of your site, e.g. /blog
 # url: "http://ejjoo.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 url: 'https://blog.integratech.io'
