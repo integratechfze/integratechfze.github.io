@@ -6,6 +6,7 @@ categories: [AWS, ECS, DevOps]
 tags: [Lambda, ECS]
 ---
 <br/>
+###Amazon ECS Task Placement Constraints
 Amazon ECS task placement constraints are a very useful way to handle the placement of containers in an ECS cluster. Task placement constraints are rules that are considered during task placement. We may want to apply these rules to make sure that the task that we are launching are placed on an EC2 instance with the correct Amazon Machine Image (AMI), Operationg System (OS), CPU architecture or the instance type. We may have situations where we are running a heterogenous ECS cluster, for example, a mix of different EC2 instance types and we want to ensure that our tasks run on the correct instance type. In these situations we have to use ECS task placement constraints to ensure that we get the desired task placement. Unfortunately, Amazon ECS provides only a handful of task placement constraint attributes out of the box. However, we can leverage custom attributes to build and apply our own constraints on ECS tasks. In this blog post I will demonstrate, how we can use custom attributes to handle a very common use case of managing tasks to run on the correct instance lifecycle type (On-Demand | Spot).  
 
 <br/>
@@ -14,13 +15,15 @@ Spot instances are a great way to save compute cost on AWS, you can get up to 90
 <br/>
 ### Configuring the Cluster with Spot instances  
 If the ECS cluster was launched using the ECS console with the default setting we may not have the option to add spot instances to our cluster or auto-scale the cluster on spot instances. In order to enable this capability we need to make some modification to our autoscaling group. First we need to convert our launch configuration to a launch template.  
-
+<br/>
 Go to the launch configuration's tab and select the lunch configuration created by our ECS cluster.  
 From 'Actions' click 'Copy to launch template'  
+<br/>
 ![Copy-launch-template](/public/img/posts/ecs-custom-constrains-01.png)
-  
+<br/>  
 Once the launch template is created we need to update the autoscaling group, with the launch template.  
 Select the ECS Autoscaling group and click Edit  
+<br/>
 ![Autoscaling-group](/public/img/posts/ecs-custom-constrains-02.png)  
   
 Under the Launch Configuration dialog box click '<span style="color:blue">Switch to launch template</span>'  
