@@ -1,7 +1,7 @@
 ---
 title: ECS Custom Constraints for Instance Lifecycle 
 author: hazaq_naeem
-date: 2020-08-26 11:33:00 +0400
+date: 26 August 2020 11:33:00 +0400
 categories: [AWS, ECS, DevOps]
 tags: [Lambda, ECS]
 ---
@@ -67,11 +67,14 @@ $ aws ecs put-attributes --attributes name=LifeCycle,value=On-Demand,targetId=ar
 Similarly we can tag spot instances with LifeCycle: Spot  
 <br/>
 In the task definition of the our service we can add a constrain of type memberOf with the following Expression `attribute:LifeCycle == On-Demand`  
+<br/>
 ![ecs-task](/public/img/posts/ecs-custom-constrains-08.png)  
-
+<br/>
 ### Automate the update of Instance attributes 
 So far so good, but the container instances in our cluster are part of an autoscaling group which means that new instances could be added or removed dynamically and it will be impractical to add these attributes manually every time.  
+<br/>
 We can add custom attributes by update the `/etc/ecs/ecs.config` file. Below is a script that I have added into the user data of the my launch template.  
+<br/>
 ```terminal
 #!/bin/bash
 echo ECS_CLUSTER=ecs-demo >> /etc/ecs/ecs.config
@@ -83,12 +86,16 @@ else
   echo 'ECS_INSTANCE_ATTRIBUTES={"LifeCycle": "Spot"}' >> /etc/ecs/ecs.config
 fi
 ```
+<br/>
 Now every time a new container instance starts up its attributes will be populated automatically.  
-
+<br/>
 ### Automate the update of Instance attributes (<span style="color:red">The Hard Way</span>)
+<br/>
 (*Just for fun I wanted to try something different, here I have used a lambda function to update the same attributes.*)  
+<br/>
 Let's create a Cloudwatch event to capture every time a new container instances is registered with our cluster and use a simple lambda function to update the attributes of the container instances.  
 First the lambda function.  
+<br/>
 ```ruby
 import boto3
 import os
@@ -121,11 +128,14 @@ def lambda_handler(event, context):
                         event['detail']['requestParameters']['cluster'])
         
 ```
-The IAM role for the lambda function should have update attributes permission on the ECS cluster   
+<br/>
+The IAM role for the lambda function should have update attributes permission on the ECS cluster.   
 And finally the Cloudwatch event  
+<br/>
 ![cloudwatch-event](/public/img/posts/ecs-custom-constrains-09.png)  
+<br/>
 The target of the above Cloudwatch event should be the lambda function we created previously.  
 Now every time a new container instance is registered with ECS cluster the Cloudwatch event triggers the lambda function which will update our attribute.  
-
+<br/>
 ### Conclusion  
-Amazon ECS task placement constrains are a very powerful feature available to the developers and cluster administrators. Not all attributes for the task placements are available but with custom attributes you can practically apply any constrain that you can think of and there will always be more than one way to it.  
+Amazon ECS task placement constrains are a very powerful feature available to the developers and cluster administrators. Not all attributes for the task placements are available but with custom attributes you can practically apply any constraint that you can think of and there will always be more than one way of doing it.  
