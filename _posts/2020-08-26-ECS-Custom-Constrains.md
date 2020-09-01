@@ -42,7 +42,7 @@ I have configured my autoscaling group to launch the first 4 EC2 instances to be
 <br/>
 ### Applying the Custom Attributes
 <br/>
-While this saves us a lot of cost it also creates a problem, for some critical applications where it is not acceptable to interrupt the service if a spot instance is terminated and this can happen quite randomly from few times a day to few times a month. We need to restrict our ECS services to only launch task on On-Demand instances but AWS ECS instances does not have a built in attribute to handle instance lifecycle (On-Demand | Spot). In this case we can use custom attributes, and create a constrain based on custom attribute.  
+While this saves us a lot of cost it also creates a problem, for some critical applications where it is not acceptable to interrupt the service if a spot instance is terminated and this can happen quite randomly from few times a day to few times a month. We need to restrict our ECS services to only launch task on On-Demand instances but AWS ECS instances does not have a built in attribute to handle instance lifecycle (On-Demand | Spot). In this case we can use custom attributes, and create a constraint based on custom attribute.  
 <br/>
 Go to the ECS console and select the container instance click on 'Action' -> 'View/Edit Attributes'   
 <br/>
@@ -66,7 +66,7 @@ $ aws ecs put-attributes --attributes name=LifeCycle,value=On-Demand,targetId=ar
 <br/>
 Similarly we can tag spot instances with LifeCycle: Spot  
 <br/>
-In the task definition of the our service we can add a constrain of type memberOf with the following Expression `attribute:LifeCycle == On-Demand`  
+In the task definition of the our service we can add a constraint of type memberOf with the following Expression `attribute:LifeCycle == On-Demand`  
 <br/>
 ![ecs-task](/public/img/posts/ecs-custom-constrains-08.png)  
 <br/>
