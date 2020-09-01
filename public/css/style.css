@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@1,600;1,700&display=swap');
 @import url(//fonts.googleapis.com/css?family=Ubuntu:500&subset=latin,latin-ext);
 @import url('https://fonts.googleapis.com/css?family=Gelasio|Kulim+Park|Nanum+Myeongjo|Nanum+Gothic|Noto+Sans|Noto+Sans+KR|Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gudea&display=swap');
 @import url(syntax/monokai.css);
 
 :root {
@@ -51,7 +52,7 @@ body {
 	margin: 0;
 	padding: 0;
 	/*	font-family: 'Gelasio', 'Nanum Myeongjo', serif; */
-	font-family: 'Titillium Web';
+	font-family: 'Gudea';
 	color: #2c3e50;
 }
 
