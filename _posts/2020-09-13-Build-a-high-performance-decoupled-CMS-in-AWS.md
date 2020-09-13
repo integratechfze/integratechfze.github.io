@@ -56,14 +56,15 @@ As the AWS-Well Architected Framework says, we should follow the AWS recommended
 <br/>
 
 ### Virtual Private Network in AWS: 
-</br>
+
 
 Create an AWS VPC of a network CIDR of 10.0.0.0/17 with 2 public & 4 private subnets spread across 2 availability zones (AZ). Egress internet access for servers can be enabled using AWS managed NAT gateways. The application & database servers should be launched in private subnets because these shouldn’t be reachable from internet thus ensuring security.
 There will be an Elastic Load Balancer (Application Load Balancer to be specific) deployed in the public subnets and all the traffic to the CMS application is expected to go through the load balancer. The ALB receives inbound traffic at HTTP/HTTPS ports 80/443 from the internet. A free SSL certificate can be created and attached to the ALB with AWS Certificate Manager. Any insecure http requests will be routed to https 443 port for ensuring security.
   
 <br/>
+
 ### Drupal 8 as the Headless CMS:
-</br>
+
 
 
 We can create a base AMI with latest stable PHP, Drupal 8 and necessary Apache 2.4 configurations. We might need to install Amazon CloudWatch agent, AWS Sessions Manager agent, AWS CodeDeploy agent for logging/monitoring, SSH logins and automated deployment respectively. This CMS app instances can be launched as an AutoScaling group (ASG) with minimum: 1, desired: 1 and maximum: 2 instances as the Scaling Policy. The ASG will be associated with the 2 different private subnets so that we can ensure high availability in case of data center failure. The EC2 instance’s Security group will have inbound traffic allowed from only the Load Balancer Security Group.
@@ -71,8 +72,9 @@ We can create a base AMI with latest stable PHP, Drupal 8 and necessary Apache 2
 The CMS database will be created as an RDS Aurora MySQL cluster with a Writer/Primary DB instance running in one private subnet and another Reader/Secondary DB instance running a different private subnet in another AZ. The database should not be publicly accessible to enhance security. The Security Group of the RDs will have inbound traffic allowed only from the Application EC2 instance’s Security group.
 
 <br/>
+
 ### Automated Deployment Pipeline (Continuous Integration and Continuous Deployment): 
-</br>
+
 
 
 We can create a separate code repository (Github/CodeCommit) for keeping the Drupal8 source code. At least 2 branches should be maintained to ensure no buggy code reaches Production deployment pipeline. As a common strategy, we can have the Master branch and a dev branch for development code.
@@ -86,11 +88,13 @@ We can optionally mount an Elastic File System (EFS) shared filesystem mount poi
 When new Amazon EC2 instances are launched as part of an Amazon EC2 Auto Scaling group, CodeDeploy can deploy the code revisions to the new instances automatically. We can also coordinate deployments in CodeDeploy with Amazon EC2 Auto Scaling instances registered with Elastic Load Balancing load balancers (ALB).
 
 <br/>
+
 ### Deployment automation of Frontend website with S3 Static Webhosting:
 <br/>
 ![build-and-deploy-frontend](/public/img/posts/decoupled-cms-aws-04.jpeg)  
 <br/>
 Similar to the Drupal8 CMS deployment pipeline, we will have another pipeline for the frontend as well. The only difference is that, we need to configure Amazon CodeBuild buildspec.yml (Build specification/configuration) so that build process can be automated without requiring a CI/Build server running always. We can have the build logs populated in a CloudWatch logstream/S3 bucket, which makes debugging/troubleshooting easy.
+
 
 Here is a an example buildspec.yml :
    
@@ -148,12 +152,12 @@ artifacts:
   files: 
     - "**/*"
 ```
-<br/> 
+
 The resulting artifacts will be the ReactJS static website with html, js, cs, fonts etc. This will be synced to two S3 buckets as a deployment. These 2 S3 buckets in 2 different AWS regions (for example one in Ireland and another one in Singapore) to host the static website. In this way the website will survive even in case of a regional disaster thus high availability can be ensured.
 
 </br>
+
 ### Improving the site performance with a global CDN:
-</br>
 
 
 The S3 static website can directly be used to serve the website. But the whole purpose of generating the static version of CMS frontend is to serve it as Progressive Web Application (PWA), through a high-speed global Content Delivery Network (CDN). We can utilize Amazon CloudFront which offers much more functionality than just a CDN. 
@@ -161,10 +165,11 @@ The S3 static website can directly be used to serve the website. But the whole p
 We can create a Cloudfront web distribution with custom SSL certificate for the domain – which can be created in N.Virginia AWS Certificate Manager for free. Create three origins – one or for the ALB for dynamic requests and two custom origins, each for the S3 static webhosting endpoints (Ireland and Singapore buckets). Create an origin group with the two S3 static webhosting endpoint origins to provide rerouting during a failover event. We can associate an origin group with a cache behavior to have requests routed from a primary origin to a secondary origin for failover. We must have two origins for the distribution before we can create an origin group.
 
 <br/>
-![enchance-performance-security-frontend](/public/img/posts/decoupled-cms-aws-05.png)  
+![enh ance-performance-security-frontend](/public/img/posts/decoupled-cms-aws-05.png)  
 <br/>
 We can associate a Lambda@Edge custom code to append custom headers, redirection, additional processing logic for each request reaching any Cloudfront cache behaviors. We will be able to create up to 25 cache behaviors per Cloudfront distribution. We should create a global Web Application Firewall (WAF) with OWASP top 10 rules to protect the Cloudfront endpoint from attacks/exploits.  
 <br/>
+
 ### The complete AWS architecture
 <br/>
 ![complete-architecture](/public/img/posts/decoupled-cms-aws-06.jpeg)  
