@@ -4,21 +4,22 @@ author: amal_jith
 date: 13 September 2020 11:33:00 +0400
 categories: [AWS, CMS, DevOps]
 tags: [CloudFront, CodeBuild]
-published: false
+published: true
 ---
 <br/>
 ### Web Content Management Systems
-From the inception of www, websites/pages were a popularly adopted concept in the digital world whether it was for used for commercial, government, research or communities. 
+From the inception of the World Wide Web (www), websites and pages were a popularly adopted concept in the digital world whether it was for used for commercial, government, research or community purposes. 
 
-Making websites more interactive and useful for daily transactions led to implementation of dynamic websites which were developed in either in ahigh level programming language such as PHP, Java or JavaScript.  As the need of having a web/online presence surged, the pain of developing feature rich web applications became tough as it involved culmination of different software frameworks and coding. That tis where Web Content Management Systems came to the rescue for easily creating and managing different digital or online content.
+Making websites more interactive and useful for daily transactions led to implementation of dynamic websites which were developed in either in a high level programming language such as PHP, Java or JavaScript.  As the need of having an online presence surged, the pain of developing feature rich web applications increased as it involved different software frameworks and coding. That is where Web Content Management Systems came to the rescue for easily creating and managing content.
 <br/>
 ![CMS-Creativity](/public/img/posts/decoupled-cms-aws-01.jpg)
 <br/> 
-WCMS provides website authoring, collaboration, and administration tools that help users with little knowledge of web programming languages or markup languages create and manage website content. It also controls a dynamic collection of web material, including HTML documents, images, and other forms of media. As of today, WordPress is the leading content management system (CMS) with 63% market share and 36.2% of all websites built with it, followed by Joomla, Drupal and so many other open sources as well as paid options. 
+Web Content Management Systems (WCMS) provides website authoring, collaboration, and administration tools that help users with little knowledge of web programming languages or markup languages create and manage website content. It also controls a dynamic collection of web material, including HTML documents, images, and other forms of media. As of today, WordPress is the leading content management system (CMS) with 63% market share and 36.2% of all websites built with it, followed by Joomla, Drupal and so many other open sources as well as paid options. 
 
 <br/>
 ### The problem isn’t solved there by using a CMS...  
-The increase in number of internet users and mobile devices and digitalization of industries caused explosive growth in web traffic. The www project happened in 1991 with one website and today we have around 1.79 billion active websites across the domains and it is still growing. Using a CMS framework doesn’t solve the actual problem in today’s world, due to multiple reasons:
+The increase in number of internet users and mobile devices and digitalization of industries caused explosive growth in web traffic. The www project happened in 1991 with one website and today we have around 1.8 billion websites and growing rapidly. Using a CMS framework doesn’t solve the actual problem in today’s world, due to multiple reasons:
+
 * Speed and performance of a website with that of a similar competitor matters as the options are plenty.
 * Website contents include high-definition media (images, animation, videos, audio etc.) which should be delivered without any delay.
 * End user devices(clients) are becoming more than just a presentation platform, as these are becoming powerful in hardware/software and their processing capabilities should be leveraged, than doing the processing in the server-side itself.
