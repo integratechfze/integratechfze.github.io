@@ -17,17 +17,18 @@ Making websites more interactive and useful for daily transactions led to implem
 Web Content Management Systems (WCMS) provides website authoring, collaboration, and administration tools that help users with little knowledge of web programming languages or markup languages create and manage website content. It also controls a dynamic collection of web material, including HTML documents, images, and other forms of media. As of today, WordPress is the leading content management system (CMS) with 63% market share and 36.2% of all websites built with it, followed by Joomla, Drupal and so many other open sources as well as paid options. 
 
 <br/>
-### The problem isn’t solved there by using a CMS...  
-The increase in number of internet users and mobile devices and digitalization of industries caused explosive growth in web traffic. The www project happened in 1991 with one website and today we have around 1.8 billion websites and growing rapidly. Using a CMS framework doesn’t solve the actual problem in today’s world, due to multiple reasons:
+The increase in number of internet users and mobile devices and rapid digitalization caused explosive growth in web traffic. The www project happened in 1991 with one website and today we have around 1.8 billion websites and growing rapidly.
 
 * Speed and performance of a website with that of a similar competitor matters as the options are plenty.
 * Website contents include high-definition media (images, animation, videos, audio etc.) which should be delivered without any delay.
 * End user devices(clients) are becoming more than just a presentation platform, as these are becoming powerful in hardware/software and their processing capabilities should be leveraged, than doing the processing in the server-side itself.
 * With the wide adoption of public cloud, there are more ways to host a website/web application like static webhosting, serverless, container based microservices etc. which offer more security and cost less.
 
+Suddenly a traditional CMS seems unappealing and too dated, which leads us to....
+
 <br/>
 ### Decoupled CMS with Frontend WebApp and a Headless CMS
-In a traditional CMS, the CMS system will be responsible for both storing/managing the content and dynamically generating/presenting the content to the audience. At times this becomes an overhead as this monolith CMS will be solely responsible for publishing & creating contents at the same time if one of the duties demand more processing. 
+In a traditional CMS, the CMS application will be responsible for both storing and managing the content as well as for dynamically generating and presenting the content to the audience. This can cause performance issues as the monolith application would need to keep serving content, even in times of a surge in web traffic, as well as continue to be accessible to content authors for new content to be created and published. 
 
 <br/>
 ![traditional-CMS](/public/img/posts/decoupled-cms-aws-02.jpeg)
