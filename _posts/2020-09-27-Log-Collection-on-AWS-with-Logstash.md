@@ -150,6 +150,8 @@ We can build the docker image using the following command.
 $ docker build my-logstash-demo:v1 .  
 ``` 
 Finally we will upload the image to our private docker image repository. It can be Amazon ECR, docker hub or any other support image repository.  
+You can use this github repository [integratechfze/logstash-ecs](https://github.com/integratechfze/logstash-ecs) to download all the configuration files. Modify the data source and elasticsearch endpoints inside logstash.yml, alb.conf and waf.conf files. 
+ 
 
 ### Run the Logstash Service  
 
@@ -164,4 +166,4 @@ Once the Logstash service start it will push logs into our Amazon Elasticsearch 
 Now we can build "Index Patterns", Visualization, Dashboards, Alarms and Anomaly Detection on our logs using the Kibana web interface.  
 
 ### Conclusion
-
+Logstash is a powerful tool to move data between different sources, it also have the capability to process those logs before sending it to the final destination. With over 200 plugins we have the capability to transform the data quite easily as compare to writing direct code. Using Logstash we can remain agnostic of how our data sources works, all you need is the right plugin and Logstash will do the rest.  
