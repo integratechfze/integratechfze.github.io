@@ -4,6 +4,7 @@ author: hazaq_naeem
 date: 27 September 2020 12:30:00 +0400
 categories: [AWS, ECS, ElasticSearch, Logstash]
 tags: [Logstash, ECS]
+published: false
 ---
 
 In any environment that it is containerized, virtual or physical and whether it is running on On-Premise or on Cloud, logging is of paramount importance. Normally logs contains important metadata that can be used to identify issues and security risks. Logs are the first place we look for to troubleshoot any issues with our applications and services. If a business critical application goes down or is facing any problems, identifying the problem sooner will save the business from losing money. So it because very important that we should not only collect logs but also index them in a way that it should be very easy to search, analyze and even visualize. For this purpose there are a lot open source and commercial tools available such as Elastic Stack, Splunk, Datadog, etc. All you need is a good log processing tool that can ingest data from different sources and push them into your favourite SIEM solution, one such tool is the Elastic's Logstash.  
@@ -158,5 +159,5 @@ Once the Logstash service start it will push logs into my Amazon Elasticsearch c
 
 Now I can build "Index Patterns", Visualization, Dashboards, Alarms and Anomaly Detection on my logs using the Kibana web interface.  
 
-### Conclustion
+### Conclusion
 
