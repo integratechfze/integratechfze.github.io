@@ -26,7 +26,7 @@ Logstash provide quite a lot of different filter plugins that can be used to fil
 
 #### Example Logstash Config for WAF Logs 
 
-```nginx 
+```markdown
 input { 
   s3 { 
     "region" => "us-east-1" 
@@ -68,7 +68,7 @@ output {
 
 #### Example Logstash Config for ALB Logs 
 
-```nginx
+```markdown
 input { 
   s3 { 
     "region" => "us-east-1" 
