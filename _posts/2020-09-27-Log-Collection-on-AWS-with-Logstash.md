@@ -15,6 +15,7 @@ In this blog post I will show you how you can use a tool like Logstash and proce
 ### Log Indexing Architecture  
 The idea is to use Logstash to pull logs generated from different sources and push it into my Amazon Elasticsearch cluster. Amazon Elasticsearch Service is a fully managed service that makes it easy for you to deploy, secure, and run Elasticsearch. The service provides support for open source Elasticsearch APIs, managed Kibana, integration with Logstash and other AWS services.  
 
+![logstash-arch](/public/img/posts/logstash-01.jpeg)
 
 ### Building the Logstash Configuration  
 The Logstash configuration files defines where your data sources are and how the data should be indexed and mutated before sending it to the output data source. Logstash configuration has three stages 'Input', 'Filter', 'Output'. 'Input' stage defines where the logs or data is residing while the 'Output' stage tells logstash where to push the filtered logs. Finally in the 'Filter' section you create mapping for your data type, this is where you define which field inside your data is IP, time, integer or string etc. Creating a proper filter is very important because if not done right you will not be able to take advantage of being able to search your logs more granularly and it will be no different than parsing logs directly from the log files.  
@@ -155,7 +156,6 @@ Before we can run our Logstash service we need to create a task definition and f
 
 Once the Logstash service start it will push logs into my Amazon Elasticsearch cluster, as explained earlier Amazon Elasticsearch comes with build in integrated Kibana service. I can login to Kibana and view my indices under "Index Management".  
 
-![Logstash-kibana](/public/img/posts/logstash-03.png)
 Now I can build "Index Patterns", Visualization, Dashboards, Alarms and Anomaly Detection on my logs using the Kibana web interface.  
 
 ### Conclustion
