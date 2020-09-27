@@ -1,11 +1,10 @@
 ---
 title: Log Collection on AWS with Logstash  
-author: hazaq_naeem
+author: hazaq_naeem  
 date: 27 September 2020 12:30:00 +0400
 categories: [AWS, ECS, ElasticSearch, Logstash]
 tags: [Logstash, ECS]
 ---
-<br/>
 
 In any environment that it is containerized, virtual or physical and whether it is running on On-Premise or on Cloud, logging is of paramount importance. Normally logs contains important metadata that can be used to identify issues and security risks. Logs are the first place we look for to troubleshoot any issues with our applications and services. If a business critical application goes down or is facing any problems, identifying the problem sooner will save the business from losing money. So it because very important that we should not only collect logs but also index them in a way that it should be very easy to search, analyze and even visualize. For this purpose there are a lot open source and commercial tools available such as Elastic Stack, Splunk, Datadog, etc. All you need is a good log processing tool that can ingest data from different sources and push them into your favourite SIEM solution, one such tool is the Elastic's Logstash.  
 
@@ -16,7 +15,7 @@ In this blog post I will show you how you can use a tool like Logstash and proce
 ### Log Indexing Architecture  
 The idea is to use Logstash to pull logs generated from different sources and push it into my Amazon Elasticsearch cluster. Amazon Elasticsearch Service is a fully managed service that makes it easy for you to deploy, secure, and run Elasticsearch. The service provides support for open source Elasticsearch APIs, managed Kibana, integration with Logstash and other AWS services.  
 
-![Logstash-arch](/public/img/posts/logstash-01.jpeg)
+#![Logstash-arch](/public/img/posts/logstash-01.jpeg)
 
 ### Building the Logstash Configuration  
 The Logstash configuration files defines where your data sources are and how the data should be indexed and mutated before sending it to the output data source. Logstash configuration has three stages 'Input', 'Filter', 'Output'. 'Input' stage defines where the logs or data is residing while the 'Output' stage tells logstash where to push the filtered logs. Finally in the 'Filter' section you create mapping for your data type, this is where you define which field inside your data is IP, time, integer or string etc. Creating a proper filter is very important because if not done right you will not be able to take advantage of being able to search your logs more granularly and it will be no different than parsing logs directly from the log files.  
