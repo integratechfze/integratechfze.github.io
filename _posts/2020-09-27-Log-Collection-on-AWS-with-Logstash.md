@@ -134,7 +134,7 @@ fi
 ``` 
 ### Building the Docker Images 
 
-With all the changes we need to build the new docker images using public Logstash image. We need to add the configuration files the modified pipeline and the  docker-entrypoint file.  
+With all the changes we need to build the new docker images using public the Logstash image. We need to add the configuration files the modified pipeline and the  docker-entrypoint file.  
 ``` 
 FROM docker.elastic.co/logstash/logstash:7.9.1 
 RUN rm -f /usr/share/logstash/pipeline/logstash.conf /usr/share/logstash/config/logstash.yml 
@@ -149,19 +149,19 @@ We can build the docker image using the following command.
 ``` 
 $ docker build my-logstash-demo:v1 .  
 ``` 
-Finally upload the image to your private docker image repository. It can be Amazon ECR, docker hub or any other support image repository.  
+Finally we will upload the image to our private docker image repository. It can be Amazon ECR, docker hub or any other support image repository.  
 
 ### Run the Logstash Service  
 
-Before we can run our Logstash service we need to create a task definition and finally create a service that runs the task in our ECS cluster. As part of the task definition we need to assign proper permissions to the Logstash service. We need to create an ECS role and assign read permissions on the S3 buckets where our  logs are stored. The network mode could be bridge and since I am not exposing any ports from my Logstash service with my use case.  
+Before we can run our Logstash service we need to create a task definition and finally create a service that runs the task in our ECS cluster. As part of the task definition we need to assign proper permissions to the Logstash service. We need to create an ECS role and assign read permissions on the S3 buckets where our logs are stored. The network mode could be bridge, since we are not exposing Logstash ports in this use case.  
 
 ![Logstash-ecs-service](/public/img/posts/logstash-02.png)
 
 ### Visualizing the Logs in Kibana  
 
-Once the Logstash service start it will push logs into my Amazon Elasticsearch cluster, as explained earlier Amazon Elasticsearch comes with build in integrated Kibana service. I can login to Kibana and view my indices under "Index Management".  
+Once the Logstash service start it will push logs into our Amazon Elasticsearch cluster, as explained earlier Amazon Elasticsearch comes with build in integrated Kibana service. We can login to Kibana and view our indices under "Index Management".  
 ![Logstash-kibana](/public/img/posts/logstash-03.png)  
-Now I can build "Index Patterns", Visualization, Dashboards, Alarms and Anomaly Detection on my logs using the Kibana web interface.  
+Now we can build "Index Patterns", Visualization, Dashboards, Alarms and Anomaly Detection on our logs using the Kibana web interface.  
 
 ### Conclusion
 
