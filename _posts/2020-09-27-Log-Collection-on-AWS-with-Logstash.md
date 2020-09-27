@@ -26,7 +26,7 @@ Logstash provide quite a lot of different filter plugins that can be used to fil
 
 #### Example Logstash Config for WAF Logs 
 
-```json 
+```nginx 
 input { 
   s3 { 
     "region" => "us-east-1" 
@@ -68,7 +68,7 @@ output {
 
 #### Example Logstash Config for ALB Logs 
 
-```json 
+```nginx
 input { 
   s3 { 
     "region" => "us-east-1" 
@@ -117,7 +117,7 @@ Logstash has the ability to run multiple pipelines for a single Logstash instanc
 
 Each plugin in Logstash has its own configuration options, for example the S3 input plugin I am using in the above examples requires "bucket" settings and some optional settings like "region", "prefix" etc. One of the optional settings used above is the "sincedb_path", this is a just a file where the Logstash S3 plugin keeps track of the date the last handled file was added to S3. If this file is not defined every time Logstash restarts, the plugin starts pulling the data from the very beginning. If we were running Logstash inside an EC2 as a process we didn't had to worry about it, but we are running Logstash as an ephemeral container. For this reason I have modified the docker-entrypoint file and added a startup command to automatically generate "Sincedb" file and update it with the current time. In this way every time the Logstash container restarts, it will pull logs starting from the current time, this means that we may miss some log files but it is better than having lots of duplicate entries.  
 
-``` 
+```bash 
 #!/bin/bash -e 
 env2yaml /usr/share/logstash/config/logstash.yml 
 export LS_JAVA_OPTS="-Dls.cgroup.cpuacct.path.override=/ -Dls.cgroup.cpu.path.override=/ $LS_JAVA_OPTS" 
@@ -135,7 +135,7 @@ fi
 ### Building the Docker Images 
 
 With all the changes we need to build the new docker images using public the Logstash image. We need to add the configuration files the modified pipeline and the  docker-entrypoint file.  
-``` 
+```bash
 FROM docker.elastic.co/logstash/logstash:7.9.1 
 RUN rm -f /usr/share/logstash/pipeline/logstash.conf /usr/share/logstash/config/logstash.yml 
 ADD alb.conf /usr/share/logstash/pipeline/ 
