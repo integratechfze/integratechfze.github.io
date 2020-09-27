@@ -26,7 +26,7 @@ Logstash provide quite a lot of different filter plugins that can be used to fil
 
 #### Example Logstash Config for WAF Logs 
 
-``` 
+```json 
 input { 
   s3 { 
     "region" => "us-east-1" 
@@ -68,7 +68,7 @@ output {
 
 #### Example Logstash Config for ALB Logs 
 
-```console 
+```json 
 input { 
   s3 { 
     "region" => "us-east-1" 
@@ -106,7 +106,7 @@ output {
 ``` 
 ### Creating Logstash Pipelines  
 Logstash has the ability to run multiple pipelines for a single Logstash instance. What this means is that we can run two or more configuration file parallelly from same Logstash container/process. Say if I want to run two pipelines from my Logstash container one for WAF logs and the other for ELB logs, my pipeline.yml file will look something like this.  
-``` 
+```yaml 
 - pipeline.id: waf 
   path.config: "/usr/share/logstash/pipeline/waf-log.config" 
 - pipeline.id: alb 
