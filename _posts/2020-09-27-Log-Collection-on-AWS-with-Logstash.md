@@ -14,15 +14,15 @@ Logstash in my opinion is the swiss army knife of log processing tools. Logstash
 In this blog post I will show you how you can use a tool like Logstash and process your logs before indexing them. For this blog I will be using Amazon Elasticsearch as my output data source but you can use Datadog, Graphite, CloudWatch or any other supported data sources. You can install and configure Logstash as a package on almost any Linux distro, but I will be running Logstash as a container inside my Amazon ECS cluster.  
 
 ### Log Indexing Architecture  
-The idea is to use Logstash to pull logs generated from different sources and push it into the Amazon Elasticsearch cluster. Amazon Elasticsearch Service is a fully managed service that makes it easy for you to deploy, secure, and run Elasticsearch. The service provides support for open source Elasticsearch APIs, managed Kibana, integration with Logstash and other AWS services.  
+The idea is to use Logstash to pull logs generated from different sources and push it into the Amazon Elasticsearch Service. Amazon Elasticsearch Service is a fully managed service that makes it easy for you to deploy, secure, and run Elasticsearch. The service provides support for open source Elasticsearch APIs, managed Kibana, integration with Logstash and other AWS services.  
 You should have a running Amazon Elasticsearch cluster in order to follow along. But if you have different output data source for example Datadog then you need make modification as per the use case. 
 
 ![Logstash-arch](/public/img/posts/logstash-01.jpeg)
 
 ### Building the Logstash Configuration  
-The Logstash configuration files defines where our data sources are and how the data should be indexed and mutated before sending it to the output data source. Logstash configuration has three stages 'Input', 'Filter', 'Output'. 'Input' stage defines where the logs or data is residing while the 'Output' stage tells logstash where to push the filtered logs. Finally in the 'Filter' section you create the mapping for your data type, this is where you define which field inside your data is IP, time, integer or string etc. Creating a proper filter is very important because if not done right you will not be able to take advantage of being able to search your logs more granularly and it will be no different than parsing logs directly from the log files.  
+The Logstash configuration files defines what our input data sources are and how the data should be indexed and mutated before sending it to the output data source. Logstash configuration has three stages 'Input', 'Filter', 'Output'. 'Input' stage defines where the logs or data is residing while the 'Output' stage tells logstash where to push the filtered logs. Finally in the 'Filter' section you create the mapping for your data type, this is where you define which field inside your data is IP, time, integer or string etc. Creating a proper filter is very important because if not done right you will not be able to take advantage of being able to search your logs more granularly and it will be no different than parsing logs directly from the log files.  
 
-Logstash provide quite a lot of different filter plugins that can be used to filter our logs. Here you can explore all the filter plugins available [link](https://www.elastic.co/guide/en/logstash/current/filter-plugins.html). As part of the blog I will create example Logstash configuration for AWS WAF logs and AWS ELB logs.  
+Logstash provide quite a lot of different filter plugins that can be used to filter our logs. Here you can explore all the available [filter plugins](https://www.elastic.co/guide/en/logstash/current/filter-plugins.html). As part of the blog I will create example Logstash configuration for AWS WAF logs and AWS ELB logs.  
 
 #### Example Logstash Config for WAF Logs 
 The input stage of the below configuration file contains the S3 bucket information such as the bucket name, bucket region and prefix. We can also define the time interval in seconds to wait between to check the file list again after a run is finished. Similarly in the output stage we are defining the Amazon Elasticsearch endpoint and how to create the new index for our data. 
@@ -34,7 +34,7 @@ input {
     "bucket" => "my-waf-logs" 
     "prefix" => "WAF" 
     "type" => "waf-log" 
-    "interval" => "60" 
+    "interval" => "300" 
     "sincedb_path" => "/tmp/.waf-log_since.db" 
   } 
 } 
@@ -68,7 +68,7 @@ output {
 ```   
 
 #### Example Logstash Config for ALB Logs 
-AWS ELB Application Load balancer logs don't have a particular structure (for example csv, json etc) so I am using the grok filter plugin which is a great way to parse unstructured log data into something structured and queryable. But grok may a bit difficult to write, here is a great tool to build and debug grok patterns.  
+AWS ELB Application Load balancer logs don't have a particular structure (for example csv, json etc) so I am using the grok filter plugin which is a great way to parse unstructured log data into something structured and queryable. But grok may be a bit difficult to write, here is an online tool to build and debug grok patterns.  
 [grokdebug.herokuapp.com](http://grokdebug.herokuapp.com/)  
 ```haml
 input { 
@@ -77,7 +77,7 @@ input {
     "bucket" => "my-alb-logs" 
     "prefix" => "ALB" 
     "type" => "alb-log" 
-    "interval" => "60" 
+    "interval" => "300" 
     "sincedb_path" => "/tmp/.alb-log_since.db" 
   } 
 } 
@@ -107,7 +107,7 @@ output {
 
 ``` 
 ### Creating Logstash Pipelines  
-Logstash has the ability to run multiple pipelines for a single Logstash instance. What this means is that we can run two or more configuration file parallelly from same Logstash container/process. Say if I want to run two pipelines from my Logstash container one for WAF logs and the other for ELB logs, my pipeline.yml file will look something like this.  
+Logstash has the ability to run multiple pipelines from a single Logstash instance. What this means is that we can run two or more configuration file parallelly from same Logstash container/process. Say if I want to run two pipelines from my Logstash container one for WAF logs and the other for ELB logs, my `pipeline.yml` file will look something like this.  
 ```yaml 
 - pipeline.id: waf 
   path.config: "/usr/share/logstash/pipeline/waf-log.config" 
@@ -117,7 +117,7 @@ Logstash has the ability to run multiple pipelines for a single Logstash instanc
 
 ### Managing the Sincedb in S3 plugin  
 
-Each plugin in Logstash has its own configuration options, for example the S3 input plugin I am using in the above examples requires "bucket" settings and some optional settings like "region", "prefix" etc. One of the optional settings used above is the "sincedb_path", this is a just a file where the Logstash S3 plugin keeps track of the date the last handled file was added to S3. If this file is not defined every time Logstash restarts, the plugin starts pulling the data from the very beginning. If we were running Logstash inside an EC2 as a process we didn't had to worry about it, but we are running Logstash as an ephemeral container. For this reason I have modified the docker-entrypoint file and added a startup command to automatically generate "Sincedb" file and update it with the current time. In this way every time the Logstash container restarts, it will pull logs starting from the current time, this means that we may miss some log files but it is better than having lots of duplicate entries.  
+Each plugin in Logstash has its own configuration options, for example the S3 input plugin I am using in the above examples requires "bucket" settings and some optional settings like "region", "prefix" etc. One of the optional settings used above is the "sincedb_path", this is a just a file where the Logstash S3 plugin keeps track of the date the last handled file was added to S3. If this file is not defined, every time Logstash restarts the plugin starts pulling the data from the very beginning. If we were running Logstash inside an EC2 as a process we didn't had to worry about it, but we are running Logstash as an ephemeral container. For this reason I have modified the docker-entrypoint file and added a startup command to automatically generate "Sincedb" file and update it with the current time. In this way every time the Logstash container restarts, it will pull logs starting from the current time, this means that we may miss some log files but it is better than having lots of duplicate entries.  
 
 ```bash 
 #!/bin/bash -e 
@@ -136,7 +136,7 @@ fi
 ``` 
 ### Building the Docker Images 
 
-With all the changes we need to build the new docker images using public the Logstash image. We need to add the configuration files the modified pipeline and the  docker-entrypoint file.  
+With all the changes we need to build the new docker images using the public Logstash image. We need to add the configuration files, the modified pipeline and the docker-entrypoint file.  
 ```bash
 FROM docker.elastic.co/logstash/logstash:7.9.1 
 RUN rm -f /usr/share/logstash/pipeline/logstash.conf /usr/share/logstash/config/logstash.yml 
@@ -157,7 +157,7 @@ You can use this github repository [integratechfze/logstash-ecs](https://github.
 
 ### Run the Logstash Service  
 
-Before we can run our Logstash service we need to create a task definition and finally create a service that runs the task in our ECS cluster. As part of the task definition we need to assign proper permissions to the Logstash service. We need to create an ECS role and assign read permissions on the S3 buckets where our logs are stored. The network mode could be bridge, since we are not exposing Logstash ports in this use case.  
+Before we can run our Logstash service we need to create a task definition and finally create a service that runs the task in our ECS cluster. As part of the task definition we need to assign proper permissions to the Logstash service. We need to create an ECS role and assign read permissions on the S3 buckets where our logs are stored. The network mode could be bridge, since we are not exposing Logstash ports.  
 
 ![Logstash-ecs-service](/public/img/posts/logstash-02.png)
 
