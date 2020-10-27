@@ -4,16 +4,17 @@ author: amal_jith
 date: 13 September 2020 11:33:00 +0400
 categories: [AWS, CMS, DevOps]
 tags: [CloudFront, CodeBuild]
-published: false
+published: true
 typora-root-url: ../../integratechfze.github.io
 ---
-<br/>
+
 
 ### Web Content Management Systems
 From the inception of the World Wide Web (www), websites and pages were a popularly adopted concept in the digital world whether it was for used for commercial, government, research or community purposes. 
 
 Making websites more interactive and useful for daily transactions led to implementation of dynamic websites which were developed in either in a high level programming language such as PHP, Java or JavaScript.  As the need of having an online presence surged, the pain of developing feature rich web applications increased as it involved different software frameworks and coding. That is where Web Content Management Systems came to the rescue for easily creating and managing content.
-<br/>
+
+
 ![CMS-Creativity](/public/img/posts/decoupled-cms-aws-01.jpg)
 <br/> 
 Web Content Management Systems (WCMS) provides website authoring, collaboration, and administration tools that help users with little knowledge of web programming languages or markup languages create and manage website content. It also controls a dynamic collection of web material, including HTML documents, images, and other forms of media. As of today, WordPress is the leading content management system (CMS) with 63% market share and 36.2% of all websites built with it, followed by Joomla, Drupal and so many other open sources as well as paid options. 
