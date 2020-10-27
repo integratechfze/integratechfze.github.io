@@ -5,8 +5,10 @@ date: 13 September 2020 11:33:00 +0400
 categories: [AWS, CMS, DevOps]
 tags: [CloudFront, CodeBuild]
 published: false
+typora-root-url: ../../integratechfze.github.io
 ---
 <br/>
+
 ### Web Content Management Systems
 From the inception of the World Wide Web (www), websites and pages were a popularly adopted concept in the digital world whether it was for used for commercial, government, research or community purposes. 
 
@@ -19,27 +21,32 @@ Web Content Management Systems (WCMS) provides website authoring, collaboration,
 <br/>
 The increase in number of internet users and mobile devices and rapid digitalization caused explosive growth in web traffic. The www project happened in 1991 with one website and today we have around 1.8 billion websites and growing rapidly.
 
-* Speed and performance of a website with that of a similar competitor matters as the options are plenty.
-* Website contents include high-definition media (images, animation, videos, audio etc.) which should be delivered without any delay.
-* End user devices(clients) are becoming more than just a presentation platform, as these are becoming powerful in hardware/software and their processing capabilities should be leveraged, than doing the processing in the server-side itself.
-* With the wide adoption of public cloud, there are more ways to host a website/web application like static webhosting, serverless, container based microservices etc. which offer more security and cost less.
+* Speed and performance of a website with that of a similar competitor matters, and users will move if they are dissatisfied.
+* Website contents include high-definition media (images, animation, videos, audio etc.) that should be delivered without any delay.
+* End user devices (clients) are becoming more than just a presentation platform and their processing capabilities should be leveraged rather than doing processing on the server-side.
+* With the wide adoption of public cloud, there are more ways to host web applications, be it static webhosting, serverless, or container based microservices. They can be very secure and costs less as well.
 
 Suddenly a traditional CMS seems unappealing and too dated, which leads us to....
 
 <br/>
 ### Decoupled CMS with Frontend WebApp and a Headless CMS
-In a traditional CMS, the CMS application will be responsible for both storing and managing the content as well as for dynamically generating and presenting the content to the audience. This can cause performance issues as the monolith application would need to keep serving content, even in times of a surge in web traffic, as well as continue to be accessible to content authors for new content to be created and published. 
+In a traditional CMS, the CMS application will be responsible for both storing and managing the content as well as for dynamically generating and presenting the content to the audience. This can cause performance issues as the monolith application would need to keep serving content, even in times of a surge in web traffic, while continuing to be accessible to content authors for new content to be created and published. 
 
 <br/>
 ![traditional-CMS](/public/img/posts/decoupled-cms-aws-02.jpeg)
-<br/>  
+
+
+
 WordPress, Joomla, Drupal etc. fall into the category of traditional CMS.
+
 In order to maintain better speed and performance, the best option would be to decouple the ‘head’ (Frontend delivery/presentation) from the ‘body’ (Backend processing/content management) with an API in the middle. i.e. Run the CMS as headless and implement the ‘head’ as a Progressive Web Application with a JS framework of your choice.
 
-<br/>
+
+
 ![decoupled-CMS](/public/img/posts/decoupled-cms-aws-03.jpeg)  
 <br/>  
 This separation of concerns helps in fine-tuning the content delivery to be more optimized to be a mobile friendly, and the ReactJS website will be running perfectly in the client side taking advantage of the client browser computing power. We can also utilize Static Webhosting to serve the frontend website through a content delivery network (CDN) to make it improve overall performance. There are many reasons we use GraphQL with GatsbyJS for pulling the CMS content to generate the static pages, compared to using a REST API:
+
 *	GraphQL responses are typed & organized – it can support complex object & data types like json scalars, enumerations, unions, interfaces and supports nullability. Helps to fetch a wide variety of data from the CMS and also the requesting app can use types to avoid writing manual parsing code.
 *	GraphQL queries always return predictable results. There is no under/over utilization of the API request. Apps using GraphQL will fast and stable because they control the data they get, not the server. This leads to less time in building/generating the static site.
 *	GraphQL APIs can get all the required data in a single request, while typical REST APIs require loading from multiple URLs which will be time consuming. GraphQL queries access not just the properties of one resource but also smoothly follow references between them.
@@ -55,7 +62,7 @@ As the AWS-Well Architected Framework says, we should follow the AWS recommended
 *	Operational Excellence
 *	Performance Efficiency
 *	Cost Optimization
-  
+
 <br/>
 
 ### Virtual Private Network in AWS: 
@@ -63,7 +70,7 @@ As the AWS-Well Architected Framework says, we should follow the AWS recommended
 
 Create an AWS VPC of a network CIDR of 10.0.0.0/17 with 2 public & 4 private subnets spread across 2 availability zones (AZ). Egress internet access for servers can be enabled using AWS managed NAT gateways. The application & database servers should be launched in private subnets because these shouldn’t be reachable from internet thus ensuring security.
 There will be an Elastic Load Balancer (Application Load Balancer to be specific) deployed in the public subnets and all the traffic to the CMS application is expected to go through the load balancer. The ALB receives inbound traffic at HTTP/HTTPS ports 80/443 from the internet. A free SSL certificate can be created and attached to the ALB with AWS Certificate Manager. Any insecure http requests will be routed to https 443 port for ensuring security.
-  
+
 <br/>
 
 ### Drupal 8 as the Headless CMS:
@@ -100,7 +107,7 @@ Similar to the Drupal8 CMS deployment pipeline, we will have another pipeline fo
 
 
 Here is a an example buildspec.yml :
-   
+
 <br/>
 ```yml
 version: 0.2
