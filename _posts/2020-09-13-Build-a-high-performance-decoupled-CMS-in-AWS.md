@@ -12,6 +12,8 @@ typora-root-url: ../../integratechfze.github.io
 ### Web Content Management Systems
 From the inception of the World Wide Web (www), websites and pages were a popularly adopted concept in the digital world whether it was for used for commercial, government, research or community purposes. 
 
+
+
 Making websites more interactive and useful for daily transactions led to implementation of dynamic websites which were developed in either in a high level programming language such as PHP, Java or JavaScript.  As the need of having an online presence surged, the pain of developing feature rich web applications increased as it involved different software frameworks and coding. That is where Web Content Management Systems came to the rescue for easily creating and managing content.
 
 
