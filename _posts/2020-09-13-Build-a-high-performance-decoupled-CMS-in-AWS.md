@@ -1,5 +1,5 @@
 ---
-title: Build a high-performance 'decoupled CMS' in AWS 
+title: Building a high-performance decoupled CMS in AWS 
 author: amal_jith
 date: 13 September 2020 11:33:00 +0400
 categories: [AWS, CMS, DevOps]
