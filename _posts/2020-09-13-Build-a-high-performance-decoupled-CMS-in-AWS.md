@@ -27,13 +27,14 @@ The increase in number of internet users and mobile devices and rapid digitaliza
 * Speed and performance of a website with that of a similar competitor matters, and users will move if they are dissatisfied.
 * Website contents include high-definition media (images, animation, videos, audio etc.) that should be delivered without any delay.
 * End user devices (clients) are becoming more than just a presentation platform and their processing capabilities should be leveraged rather than doing processing on the server-side.
-* With the wide adoption of public cloud, there are more ways to host web applications, be it static webhosting, serverless, or container based microservices. They can be very secure and costs less as well.
+* With the wide adoption of public cloud, there are more ways to host web applications, be it static webhosting, serverless, or container based microservices. They can be made very secure and costs less as well.
 
-Suddenly a traditional CMS seems unappealing and too dated, which leads us to....
+With all these advances in technology, a traditional CMS seems unappealing and too dated. 
 
 <br/>
+
 ### Decoupled CMS with Frontend WebApp and a Headless CMS
-In a traditional CMS, the CMS application will be responsible for both storing and managing the content as well as for dynamically generating and presenting the content to the audience. This can cause performance issues as the monolith application would need to keep serving content, even in times of a surge in web traffic, while continuing to be accessible to content authors for new content to be created and published. 
+In a traditional CMS, the CMS application is responsible for storing and managing the content as well as dynamically generating and presenting the content to the audience. This can cause performance issues as the monolith application would need to keep serving content, even in times of a surge in web traffic, while continuing to be accessible to content authors for new content to be created and published. 
 
 <br/>
 ![traditional-CMS](/public/img/posts/decoupled-cms-aws-02.jpeg)
@@ -42,24 +43,23 @@ In a traditional CMS, the CMS application will be responsible for both storing a
 
 WordPress, Joomla, Drupal etc. fall into the category of traditional CMS.
 
-In order to maintain better speed and performance, the best option would be to decouple the ‘head’ (Frontend delivery/presentation) from the ‘body’ (Backend processing/content management) with an API in the middle. i.e. Run the CMS as headless and implement the ‘head’ as a Progressive Web Application with a JS framework of your choice.
+In order to improve speed and performance, the best option would be to decouple the 'head' (the frontend) from the 'body' (backend processing / content management) and integrate them with an API, i.e., run the CMS headless and have the frontend as a progressive web application with a JS framework of your choice.
 
 
 
 ![decoupled-CMS](/public/img/posts/decoupled-cms-aws-03.jpeg)  
 <br/>  
-This separation of concerns helps in fine-tuning the content delivery to be more optimized to be a mobile friendly, and the ReactJS website will be running perfectly in the client side taking advantage of the client browser computing power. We can also utilize Static Webhosting to serve the frontend website through a content delivery network (CDN) to make it improve overall performance. There are many reasons we use GraphQL with GatsbyJS for pulling the CMS content to generate the static pages, compared to using a REST API:
+This separation will help create multiple client screen size friendly static files. ReactJS code will run in the client side. Static pages can be served through a Amazon CloudFront which is a Content Delivery Network (CDN). The advantages of using GraphQL with GatsbyJS for pulling the CMS content to generate the static pages over using a REST API are
 
-*	GraphQL responses are typed & organized – it can support complex object & data types like json scalars, enumerations, unions, interfaces and supports nullability. Helps to fetch a wide variety of data from the CMS and also the requesting app can use types to avoid writing manual parsing code.
-*	GraphQL queries always return predictable results. There is no under/over utilization of the API request. Apps using GraphQL will fast and stable because they control the data they get, not the server. This leads to less time in building/generating the static site.
-*	GraphQL APIs can get all the required data in a single request, while typical REST APIs require loading from multiple URLs which will be time consuming. GraphQL queries access not just the properties of one resource but also smoothly follow references between them.
-*	Integrating GraphQL with GatsbyJS and CMS(eg: WordPress, Drupal) is very easy with community developed stable packages & plugins.
+*	GraphQL responses are typed & organized – it can support complex object & data types like json scalars, enumerations, unions, interfaces and supports nullability. It helps fetch a wide variety of data from the CMS and the requesting app can use types to avoid writing manual parsing code.
+*	GraphQL queries always return predictable results. There is no under or over utilization of the API request. Apps using GraphQL are fast and stable because they control the data they get rather than the server. This leads to less time in generating the static site files.
+*	GraphQL APIs can get all the required data in a single request, while typical REST APIs require loading from multiple URLs. GraphQL queries access not just the properties of one resource but smoothly follows references between them.
+*	Integrating GraphQL with GatsbyJS and CMS(eg: WordPress, Drupal) is easy with community developed packages and plugins.
 
 <br/>
-### Architecting the solution in AWS
-When architecting the solution in this case, it is better if we follow a modular approach which leads to better integration of these complex components. ie. We can build the network(with subnets) first, then hosting infrastructure and finally the deployment automation.
 
-As the AWS-Well Architected Framework says, we should follow the AWS recommended best practices across the following pillars when we architect a solution, especially for Production workloads:
+### Architecting the solution in AWS
+Following the AWS-Well Architected Framework, the following pillars are to be kept in mind when designing the architecture.
 *	Security
 *	Reliability
 *	Operational Excellence
@@ -68,37 +68,37 @@ As the AWS-Well Architected Framework says, we should follow the AWS recommended
 
 <br/>
 
-### Virtual Private Network in AWS: 
+### AWS Infrastructure
 
-
-Create an AWS VPC of a network CIDR of 10.0.0.0/17 with 2 public & 4 private subnets spread across 2 availability zones (AZ). Egress internet access for servers can be enabled using AWS managed NAT gateways. The application & database servers should be launched in private subnets because these shouldn’t be reachable from internet thus ensuring security.
-There will be an Elastic Load Balancer (Application Load Balancer to be specific) deployed in the public subnets and all the traffic to the CMS application is expected to go through the load balancer. The ALB receives inbound traffic at HTTP/HTTPS ports 80/443 from the internet. A free SSL certificate can be created and attached to the ALB with AWS Certificate Manager. Any insecure http requests will be routed to https 443 port for ensuring security.
+We will create an AWS VPC of a network CIDR of 10.0.0.0/16 with 2 public and 4 private subnets spread across 2 Availability Zones (AZ). Egress from the private subnets will be through NAT gateways. The application and database servers will be lauched in the private subnets.
 
 <br/>
 
-### Drupal 8 as the Headless CMS:
-
-
-
-We can create a base AMI with latest stable PHP, Drupal 8 and necessary Apache 2.4 configurations. We might need to install Amazon CloudWatch agent, AWS Sessions Manager agent, AWS CodeDeploy agent for logging/monitoring, SSH logins and automated deployment respectively. This CMS app instances can be launched as an AutoScaling group (ASG) with minimum: 1, desired: 1 and maximum: 2 instances as the Scaling Policy. The ASG will be associated with the 2 different private subnets so that we can ensure high availability in case of data center failure. The EC2 instance’s Security group will have inbound traffic allowed from only the Load Balancer Security Group.
-
-The CMS database will be created as an RDS Aurora MySQL cluster with a Writer/Primary DB instance running in one private subnet and another Reader/Secondary DB instance running a different private subnet in another AZ. The database should not be publicly accessible to enhance security. The Security Group of the RDs will have inbound traffic allowed only from the Application EC2 instance’s Security group.
+We will also deply an Application Load Balance in the public subnets and all the traffic to the CMS application will go through the load balancer. The ALB receives inbound traffic at HTTP/HTTPS ports 80/443 from the internet. A SSL certificate should be created and attached to the ALB with AWS Certificate Manager (ACM). All requests coming over 80/http will be redirected to 443/https.
 
 <br/>
 
-### Automated Deployment Pipeline (Continuous Integration and Continuous Deployment): 
+### Drupal 8 as Headless CMS
 
+Next we need to create a base AMI with latest (stable) PHP, Drupal 8 and Apache 2.4.  Amazon CloudWatch agent, AWS Sessions Manager agent and AWS CodeDeploy agent should be installed. We will then create an AutoScaling group (ASG) with minimum 1, desired 1 and maximum 2 instances as the Scaling Policy. The ASG will be associated with different private subnets to ensure high availability. The EC2 instance Security Group (SG) will have inbound traffic allowed from only the Load Balancer SG.
 
+We will now create the database, an RDS Aurora MySQL cluster, with the Writer and Reader instances in different subnets. The database will need to set to be not publically accessible. The SG of the RDS instances will have inbound traffic allowed only from the Application EC2 instances SG.
 
-We can create a separate code repository (Github/CodeCommit) for keeping the Drupal8 source code. At least 2 branches should be maintained to ensure no buggy code reaches Production deployment pipeline. As a common strategy, we can have the Master branch and a dev branch for development code.
+<br/>
 
-AWS CodePipeline helps to orchestrate the end-to-end deployment. We can integrate the source code repository (Github/CodeCommit) end enable automatic trigger of the pipeline (like webhook) with the help of CloudWatch events starting the pipeline when there is a code push in the designated branch. The resulting artifact will be versioned and stored in an S3 bucket as an encrypted object, which is used by CodeDeploy in the deployment phase once the Manual Action stage (Approval) is passed.
+### Automated Deployment Pipeline
 
-We can customize the deployment with AWS CodeDeploy by creating an application & deployment groups so that we can leverage the out-of-the-box deployment strategies like Rolling/Canary/BlueGreen etc. Any custom steps involved in the application deployment could be configured by creating/checking-in an appspec.yml (application deployment specification) and related shell scripts (BASH) in the code repository branch – which will be used by CodeDeploy during the deployment phase.
+<br/>
 
-We can optionally mount an Elastic File System (EFS) shared filesystem mount point at /var/www/drupal8 /sites/default/files so all the Static Assets (newly uploaded images, icons, cached CSS, JS files) – which are not part of the Source code could be preserved and attached to the new instances launching in the AutoScaling group. This step can be achieved with a simple shell script and appspec.yml. 
+We need to create a CodeCommit repository for keeping the Drupal 8 code.  A master and dev branch should be created at the minimum.
 
-When new Amazon EC2 instances are launched as part of an Amazon EC2 Auto Scaling group, CodeDeploy can deploy the code revisions to the new instances automatically. We can also coordinate deployments in CodeDeploy with Amazon EC2 Auto Scaling instances registered with Elastic Load Balancing load balancers (ALB).
+AWS CodePipeline helps orchestrate end-to-end deployment. Automatic triggerring of the pipeline will be done with the help of CloudWatch events whenever there is a code push in the designated branch. The resulting artifact will be versioned and stored in an S3 bucket as an encrypted object. This will be used by CodeDeploy in the deployment phase once the Manual Action stage (Approval) is passed.
+
+We can customize the deployment with AWS CodeDeploy by creating an application as well as deployment groups so that we can leverage out-of-the-box deployment strategies like Rolling, Canary or Blue-Green. Any custom steps involved in the application deployment can be configured by creating or checking-in appspec.yml  and related shell scripts (bash) in the code repository branch. This will be used by CodeDeploy during the deployment phase.
+
+We can optionally mount an Elastic File System (EFS) shared filesystem mount point at /var/www/drupal8 /sites/default/files where static assets  which are not part of the source code (newly uploaded images, icons, cached CSS and  js files etc.) will be saved. This enables the availability of these assets when new instances are launched by the ASG. This step can be achieved with a simple shell script and appspec.yml. 
+
+When new EC2 instances are launched as part of an Amazon EC2 Auto Scaling group, CodeDeploy will deploy code revisions to the new instances automatically.
 
 <br/>
 
@@ -106,7 +106,8 @@ When new Amazon EC2 instances are launched as part of an Amazon EC2 Auto Scaling
 <br/>
 ![build-and-deploy-frontend](/public/img/posts/decoupled-cms-aws-04.jpeg)  
 <br/>
-Similar to the Drupal8 CMS deployment pipeline, we will have another pipeline for the frontend as well. The only difference is that, we need to configure Amazon CodeBuild buildspec.yml (Build specification/configuration) so that build process can be automated without requiring a CI/Build server running always. We can have the build logs populated in a CloudWatch logstream/S3 bucket, which makes debugging/troubleshooting easy.
+
+Similar to the Drupal8 CMS deployment pipeline, we will have another pipeline for the frontend. However, we need to configure the Amazon CodeBuild buildspec.yml (build specification/configuration) so that build process can be automated without requiring a continuously running build server. The build logs can be populated in a CloudWatch logstream or written to a S3 bucket,to help with debugging in case of any issues.
 
 
 Here is a an example buildspec.yml :
@@ -166,21 +167,20 @@ artifacts:
     - "**/*"
 ```
 
-The resulting artifacts will be the ReactJS static website with html, js, cs, fonts etc. This will be synced to two S3 buckets as a deployment. These 2 S3 buckets in 2 different AWS regions (for example one in Ireland and another one in Singapore) to host the static website. In this way the website will survive even in case of a regional disaster thus high availability can be ensured.
+The resulting artifacts will be the ReactJS static website with html, js, cs, fonts etc. This should be synced to two S3 buckets in different regions as a deployment. This will ensure site availability even in case of an AWS region being unavailable.
 
 </br>
 
 ### Improving the site performance with a global CDN:
 
 
-The S3 static website can directly be used to serve the website. But the whole purpose of generating the static version of CMS frontend is to serve it as Progressive Web Application (PWA), through a high-speed global Content Delivery Network (CDN). We can utilize Amazon CloudFront which offers much more functionality than just a CDN. 
+The S3 static website can directly be used to serve the website. However, we can serve the site as a Progressive Web Application (PWA) through a high-speed global Content Delivery Network (CDN), preferably Amazon CloudFront.
 
-We can create a Cloudfront web distribution with custom SSL certificate for the domain – which can be created in N.Virginia AWS Certificate Manager for free. Create three origins – one or for the ALB for dynamic requests and two custom origins, each for the S3 static webhosting endpoints (Ireland and Singapore buckets). Create an origin group with the two S3 static webhosting endpoint origins to provide rerouting during a failover event. We can associate an origin group with a cache behavior to have requests routed from a primary origin to a secondary origin for failover. We must have two origins for the distribution before we can create an origin group.
+A CloudFront web distribution with custom SSL certificate for the domain has to be created. We create three origins – one for the ALB for dynamic requests and two custom origins, one for each of the S3 static web hosting endpoints (say, Ireland and Singapore buckets). Create an origin group with the two S3 static web hosting endpoint origins to provide re-routing during a failover event. We can associate an origin group with a cache behavior to have requests routed from a primary origin to a secondary origin for failover. Something to note - we must have two origins for the distribution before we can create an origin group.
 
 <br/>
 ![enh ance-performance-security-frontend](/public/img/posts/decoupled-cms-aws-05.png)  
-<br/>
-We can associate a Lambda@Edge custom code to append custom headers, redirection, additional processing logic for each request reaching any Cloudfront cache behaviors. We will be able to create up to 25 cache behaviors per Cloudfront distribution. We should create a global Web Application Firewall (WAF) with OWASP top 10 rules to protect the Cloudfront endpoint from attacks/exploits.  
+<br/>Furthermore, we can associate Lambda@Edge functions to append custom headers, perform redirection or have additional processing logic for each request reaching each Cloudfront cache behaviors. We can create up to 25 cache behaviors per Cloudfront distribution. A Web Application Firewall (WAF) with OWASP top 10 rules should be deployed to protect the CloudFront endpoint from attacks or to thwart common exploits.  
 <br/>
 
 ### The complete AWS architecture
@@ -189,4 +189,4 @@ We can associate a Lambda@Edge custom code to append custom headers, redirection
 <br/>
 
 ### Conclusion  
-Running a decoupled CMS as headless is a great way for hosting CMS with improved performance, security and less running cost. The advanced eco system of devops related services in AWS, makes it very easier to build complex workload solutions with ease - making AWS a complete platform to build innovative solutions. 
+Running a application headless is a great way to improve performance, security, availability and to reduce costs. The advanced ecosystem of DevOps related services on AWS makes it easy to create, deploy and maintain complex web applications.
