@@ -94,7 +94,7 @@ We will now create the database, an RDS Aurora MySQL cluster, with the Writer an
 
 We need to create a CodeCommit repository for keeping the Drupal 8 code.  A master and dev branch should be created at the minimum. <br/>
 
-AWS CodePipeline helps orchestrate end-to-end deployment. Automatic triggerring of the pipeline will be done with the help of CloudWatch events whenever there is a code push in the designated branch. The resulting artifact will be versioned and stored in an S3 bucket as an encrypted object. This will be used by CodeDeploy in the deployment phase once the Manual Action stage (Approval) is passed. <br/>
+AWS CodePipeline helps orchestrate end-to-end deployment. Automatic triggerring of the pipeline will be done with the help of CloudWatch events whenever there is a code push in the designated branch. The resulting artifact will be versioned and stored in an S3 bucket as an encrypted object. This will be used by CodeDeploy in the deployment phase once the Manual Action stage (Approval) is passed. <br/><br/>
 
 We can customize the deployment with AWS CodeDeploy by creating an application as well as deployment groups so that we can leverage out-of-the-box deployment strategies like Rolling, Canary or Blue-Green. Any custom steps involved in the application deployment can be configured by creating or checking-in appspec.yml  and related shell scripts (bash) in the code repository branch. This will be used by CodeDeploy during the deployment phase. <br/>
 
