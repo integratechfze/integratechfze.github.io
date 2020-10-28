@@ -43,13 +43,15 @@ In a traditional CMS, the CMS application is responsible for storing and managin
 
 WordPress, Joomla, Drupal etc. fall into the category of traditional CMS.
 
+<br/>
+
 In order to improve speed and performance, the best option would be to decouple the 'head' (the frontend) from the 'body' (backend processing / content management) and integrate them with an API, i.e., run the CMS headless and have the frontend as a progressive web application with a JS framework of your choice.
 
 
 
 <img src="/public/img/posts/decoupled-cms-aws-03.jpeg" alt="decoupled-CMS" style="zoom:80%;" />  
 <br/>  
-This separation will help create multiple client screen size friendly static files. ReactJS code will run in the client side. Static pages can be served through a Amazon CloudFront which is a Content Delivery Network (CDN). The advantages of using GraphQL with GatsbyJS for pulling the CMS content to generate the static pages over using a REST API are
+This separation will help create multiple client screen size friendly static files. ReactJS code will run in the client side. Static pages can be served through a Amazon CloudFront which is a Content Delivery Network (CDN). The advantages of using GraphQL with GatsbyJS for pulling the CMS content to generate the static pages over using a REST API are<br/>
 
 *	GraphQL responses are typed & organized – it can support complex object & data types like json scalars, enumerations, unions, interfaces and supports nullability. It helps fetch a wide variety of data from the CMS and the requesting app can use types to avoid writing manual parsing code.
 *	GraphQL queries always return predictable results. There is no under or over utilization of the API request. Apps using GraphQL are fast and stable because they control the data they get rather than the server. This leads to less time in generating the static site files.
@@ -80,7 +82,7 @@ We will also deply an Application Load Balance in the public subnets and all the
 
 ### Drupal 8 as Headless CMS
 
-Next we need to create a base AMI with latest (stable) PHP, Drupal 8 and Apache 2.4.  Amazon CloudWatch agent, AWS Sessions Manager agent and AWS CodeDeploy agent should be installed. We will then create an AutoScaling group (ASG) with minimum 1, desired 1 and maximum 2 instances as the Scaling Policy. The ASG will be associated with different private subnets to ensure high availability. The EC2 instance Security Group (SG) will have inbound traffic allowed from only the Load Balancer SG.
+Next we need to create a base AMI with latest (stable) PHP, Drupal 8 and Apache 2.4.  Amazon CloudWatch agent, AWS Sessions Manager agent and AWS CodeDeploy agent should be installed. We will then create an AutoScaling group (ASG) with minimum 1, desired 1 and maximum 2 instances as the Scaling Policy. The ASG will be associated with different private subnets to ensure high availability. The EC2 instance Security Group (SG) will have inbound traffic allowed from only the Load Balancer SG. <br/>
 
 We will now create the database, an RDS Aurora MySQL cluster, with the Writer and Reader instances in different subnets. The database will need to set to be not publically accessible. The SG of the RDS instances will have inbound traffic allowed only from the Application EC2 instances SG.
 
@@ -90,13 +92,13 @@ We will now create the database, an RDS Aurora MySQL cluster, with the Writer an
 
 <br/>
 
-We need to create a CodeCommit repository for keeping the Drupal 8 code.  A master and dev branch should be created at the minimum.
+We need to create a CodeCommit repository for keeping the Drupal 8 code.  A master and dev branch should be created at the minimum. <br/>
 
-AWS CodePipeline helps orchestrate end-to-end deployment. Automatic triggerring of the pipeline will be done with the help of CloudWatch events whenever there is a code push in the designated branch. The resulting artifact will be versioned and stored in an S3 bucket as an encrypted object. This will be used by CodeDeploy in the deployment phase once the Manual Action stage (Approval) is passed.
+AWS CodePipeline helps orchestrate end-to-end deployment. Automatic triggerring of the pipeline will be done with the help of CloudWatch events whenever there is a code push in the designated branch. The resulting artifact will be versioned and stored in an S3 bucket as an encrypted object. This will be used by CodeDeploy in the deployment phase once the Manual Action stage (Approval) is passed. <br/>
 
-We can customize the deployment with AWS CodeDeploy by creating an application as well as deployment groups so that we can leverage out-of-the-box deployment strategies like Rolling, Canary or Blue-Green. Any custom steps involved in the application deployment can be configured by creating or checking-in appspec.yml  and related shell scripts (bash) in the code repository branch. This will be used by CodeDeploy during the deployment phase.
+We can customize the deployment with AWS CodeDeploy by creating an application as well as deployment groups so that we can leverage out-of-the-box deployment strategies like Rolling, Canary or Blue-Green. Any custom steps involved in the application deployment can be configured by creating or checking-in appspec.yml  and related shell scripts (bash) in the code repository branch. This will be used by CodeDeploy during the deployment phase. <br/>
 
-We can optionally mount an Elastic File System (EFS) shared filesystem mount point at /var/www/drupal8 /sites/default/files where static assets  which are not part of the source code (newly uploaded images, icons, cached CSS and  js files etc.) will be saved. This enables the availability of these assets when new instances are launched by the ASG. This step can be achieved with a simple shell script and appspec.yml. 
+We can optionally mount an Elastic File System (EFS) shared filesystem mount point at /var/www/drupal8 /sites/default/files where static assets  which are not part of the source code (newly uploaded images, icons, cached CSS and  js files etc.) will be saved. This enables the availability of these assets when new instances are launched by the ASG. This step can be achieved with a simple shell script and appspec.yml. <br/>
 
 When new EC2 instances are launched as part of an Amazon EC2 Auto Scaling group, CodeDeploy will deploy code revisions to the new instances automatically.
 
@@ -107,7 +109,7 @@ When new EC2 instances are launched as part of an Amazon EC2 Auto Scaling group,
 <img src="/public/img/posts/decoupled-cms-aws-04.jpeg" alt="build-and-deploy-frontend" style="zoom:67%;" />  
 <br/>
 
-Similar to the Drupal8 CMS deployment pipeline, we will have another pipeline for the frontend. However, we need to configure the Amazon CodeBuild buildspec.yml (build specification/configuration) so that build process can be automated without requiring a continuously running build server. The build logs can be populated in a CloudWatch logstream or written to a S3 bucket,to help with debugging in case of any issues.
+Similar to the Drupal8 CMS deployment pipeline, we will have another pipeline for the frontend. However, we need to configure the Amazon CodeBuild buildspec.yml (build specification/configuration) so that build process can be automated without requiring a continuously running build server. The build logs can be populated in a CloudWatch logstream or written to a S3 bucket,to help with debugging in case of any issues.<br/>
 
 
 Here is a an example buildspec.yml :
@@ -174,7 +176,7 @@ The resulting artifacts will be the ReactJS static website with html, js, cs, fo
 ### Improving the site performance with a global CDN:
 
 
-The S3 static website can directly be used to serve the website. However, we can serve the site as a Progressive Web Application (PWA) through a high-speed global Content Delivery Network (CDN), preferably Amazon CloudFront.
+The S3 static website can directly be used to serve the website. However, we can serve the site as a Progressive Web Application (PWA) through a high-speed global Content Delivery Network (CDN), preferably Amazon CloudFront.<br/>
 
 A CloudFront web distribution with custom SSL certificate for the domain has to be created. We create three origins – one for the ALB for dynamic requests and two custom origins, one for each of the S3 static web hosting endpoints (say, Ireland and Singapore buckets). Create an origin group with the two S3 static web hosting endpoint origins to provide re-routing during a failover event. We can associate an origin group with a cache behavior to have requests routed from a primary origin to a secondary origin for failover. Something to note - we must have two origins for the distribution before we can create an origin group.
 
