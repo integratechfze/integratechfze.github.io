@@ -4,7 +4,7 @@ author: hazaq_naeem
 date: 27 September 2020 12:30:00 +0400
 categories: [AWS, ECS, ElasticSearch, Logstash]
 tags: [Logstash, ECS]
-published: false
+published: true
 typora-root-url: ../public
 ---
 
