@@ -30,7 +30,7 @@ The idea is to use Logstash to pull logs generated from different AWS sources an
 
 <br/>
 
-<img src="/img/posts/logstash-01.jpeg" alt="Logstash-arch" />
+![](/public/img/posts/logstash-01.jpeg)
 
 ### Building the Logstash Configuration  
 The Logstash configuration files defines what our input data sources are and how the data should be indexed and mutated before sending it to the output data source. Logstash configuration has three stages 'Input', 'Filter', 'Output'. 'Input' stage defines where the logs or data is residing while the 'Output' stage tells logstash where to push the filtered logs. Finally in the 'Filter' section you create the mapping for your data type, this is where you define which field inside your data is IP, time, integer or string etc. Creating a proper filter is very important because if not done right you will not be able to take advantage of being able to search your logs more granularly and it will be no different than parsing logs directly from the log files.  
