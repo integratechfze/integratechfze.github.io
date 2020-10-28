@@ -17,8 +17,7 @@ From the inception of the World Wide Web (www), websites and pages were a popula
 Making websites more interactive and useful for daily transactions led to implementation of dynamic websites which were developed in either in a high level programming language such as PHP, Java or JavaScript.  As the need of having an online presence surged, the pain of developing feature rich web applications increased as it involved different software frameworks and coding. That is where Web Content Management Systems came to the rescue for easily creating and managing content.
 
 
-
-![CMS-Creativity](/public/img/posts/decoupled-cms-aws-01.jpg = 250x)
+<img src="/public/img/posts/decoupled-cms-aws-01.jpg" alt="CMS-Creativity" style="zoom:80%;" />
 <br/> 
 Web Content Management Systems (WCMS) provides website authoring, collaboration, and administration tools that help users with little knowledge of web programming languages or markup languages create and manage website content. It also controls a dynamic collection of web material, including HTML documents, images, and other forms of media. As of today, WordPress is the leading content management system (CMS) with 63% market share and 36.2% of all websites built with it, followed by Joomla, Drupal and so many other open sources as well as paid options. 
 
@@ -38,7 +37,7 @@ With all these advances in technology, a traditional CMS seems unappealing and t
 In a traditional CMS, the CMS application is responsible for storing and managing the content as well as dynamically generating and presenting the content to the audience. This can cause performance issues as the monolith application would need to keep serving content, even in times of a surge in web traffic, while continuing to be accessible to content authors for new content to be created and published. 
 
 <br/>
-![traditional-CMS](/public/img/posts/decoupled-cms-aws-02.jpeg)
+<img src="/public/img/posts/decoupled-cms-aws-02.jpeg" alt="traditional-CMS" style="zoom:80%;" />
 
 
 
@@ -48,7 +47,7 @@ In order to improve speed and performance, the best option would be to decouple 
 
 
 
-![decoupled-CMS](/public/img/posts/decoupled-cms-aws-03.jpeg)  
+<img src="/public/img/posts/decoupled-cms-aws-03.jpeg" alt="decoupled-CMS" style="zoom:80%;" />  
 <br/>  
 This separation will help create multiple client screen size friendly static files. ReactJS code will run in the client side. Static pages can be served through a Amazon CloudFront which is a Content Delivery Network (CDN). The advantages of using GraphQL with GatsbyJS for pulling the CMS content to generate the static pages over using a REST API are
 
@@ -105,7 +104,7 @@ When new EC2 instances are launched as part of an Amazon EC2 Auto Scaling group,
 
 ### Deployment automation of Frontend website with S3 Static Webhosting:
 <br/>
-![build-and-deploy-frontend](/public/img/posts/decoupled-cms-aws-04.jpeg)  
+<img src="/public/img/posts/decoupled-cms-aws-04.jpeg" alt="build-and-deploy-frontend" style="zoom:67%;" />  
 <br/>
 
 Similar to the Drupal8 CMS deployment pipeline, we will have another pipeline for the frontend. However, we need to configure the Amazon CodeBuild buildspec.yml (build specification/configuration) so that build process can be automated without requiring a continuously running build server. The build logs can be populated in a CloudWatch logstream or written to a S3 bucket,to help with debugging in case of any issues.
@@ -180,7 +179,7 @@ The S3 static website can directly be used to serve the website. However, we can
 A CloudFront web distribution with custom SSL certificate for the domain has to be created. We create three origins – one for the ALB for dynamic requests and two custom origins, one for each of the S3 static web hosting endpoints (say, Ireland and Singapore buckets). Create an origin group with the two S3 static web hosting endpoint origins to provide re-routing during a failover event. We can associate an origin group with a cache behavior to have requests routed from a primary origin to a secondary origin for failover. Something to note - we must have two origins for the distribution before we can create an origin group.
 
 <br/>
-![enh ance-performance-security-frontend](/public/img/posts/decoupled-cms-aws-05.png)  
+<img src="/public/img/posts/decoupled-cms-aws-05.png" alt="enh ance-performance-security-frontend" style="zoom:67%;" />  
 <br/>Furthermore, we can associate Lambda@Edge functions to append custom headers, perform redirection or have additional processing logic for each request reaching each Cloudfront cache behaviors. We can create up to 25 cache behaviors per Cloudfront distribution. A Web Application Firewall (WAF) with OWASP top 10 rules should be deployed to protect the CloudFront endpoint from attacks or to thwart common exploits.  
 <br/>
 
