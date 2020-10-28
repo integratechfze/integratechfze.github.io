@@ -24,10 +24,14 @@ Web Content Management Systems (WCMS) provides website authoring, collaboration,
 <br/>
 The increase in number of internet users and mobile devices and rapid digitalization caused explosive growth in web traffic. The www project happened in 1991 with one website and today we have around 1.8 billion websites and growing rapidly.
 
+<br/>
+
 * Speed and performance of a website with that of a similar competitor matters, and users will move if they are dissatisfied.
 * Website contents include high-definition media (images, animation, videos, audio etc.) that should be delivered without any delay.
 * End user devices (clients) are becoming more than just a presentation platform and their processing capabilities should be leveraged rather than doing processing on the server-side.
 * With the wide adoption of public cloud, there are more ways to host web applications, be it static webhosting, serverless, or container based microservices. They can be made very secure and costs less as well.
+
+<br/>
 
 With all these advances in technology, a traditional CMS seems unappealing and too dated. 
 
@@ -52,6 +56,8 @@ In order to improve speed and performance, the best option would be to decouple 
 <img src="/public/img/posts/decoupled-cms-aws-03.jpeg" alt="decoupled-CMS" style="zoom:80%;" />  
 <br/>  
 This separation will help create multiple client screen size friendly static files. ReactJS code will run in the client side. Static pages can be served through a Amazon CloudFront which is a Content Delivery Network (CDN). The advantages of using GraphQL with GatsbyJS for pulling the CMS content to generate the static pages over using a REST API are<br/>
+
+<br/>
 
 *	GraphQL responses are typed & organized – it can support complex object & data types like json scalars, enumerations, unions, interfaces and supports nullability. It helps fetch a wide variety of data from the CMS and the requesting app can use types to avoid writing manual parsing code.
 *	GraphQL queries always return predictable results. There is no under or over utilization of the API request. Apps using GraphQL are fast and stable because they control the data they get rather than the server. This leads to less time in generating the static site files.
@@ -84,6 +90,8 @@ We will also deply an Application Load Balance in the public subnets and all the
 
 Next we need to create a base AMI with latest (stable) PHP, Drupal 8 and Apache 2.4.  Amazon CloudWatch agent, AWS Sessions Manager agent and AWS CodeDeploy agent should be installed. We will then create an AutoScaling group (ASG) with minimum 1, desired 1 and maximum 2 instances as the Scaling Policy. The ASG will be associated with different private subnets to ensure high availability. The EC2 instance Security Group (SG) will have inbound traffic allowed from only the Load Balancer SG. <br/>
 
+<br/>
+
 We will now create the database, an RDS Aurora MySQL cluster, with the Writer and Reader instances in different subnets. The database will need to set to be not publically accessible. The SG of the RDS instances will have inbound traffic allowed only from the Application EC2 instances SG.
 
 <br/>
@@ -98,7 +106,11 @@ AWS CodePipeline helps orchestrate end-to-end deployment. Automatic triggerring 
 
 We can customize the deployment with AWS CodeDeploy by creating an application as well as deployment groups so that we can leverage out-of-the-box deployment strategies like Rolling, Canary or Blue-Green. Any custom steps involved in the application deployment can be configured by creating or checking-in appspec.yml  and related shell scripts (bash) in the code repository branch. This will be used by CodeDeploy during the deployment phase. <br/>
 
+<br/>
+
 We can optionally mount an Elastic File System (EFS) shared filesystem mount point at /var/www/drupal8 /sites/default/files where static assets  which are not part of the source code (newly uploaded images, icons, cached CSS and  js files etc.) will be saved. This enables the availability of these assets when new instances are launched by the ASG. This step can be achieved with a simple shell script and appspec.yml. <br/>
+
+<br/>
 
 When new EC2 instances are launched as part of an Amazon EC2 Auto Scaling group, CodeDeploy will deploy code revisions to the new instances automatically.
 
