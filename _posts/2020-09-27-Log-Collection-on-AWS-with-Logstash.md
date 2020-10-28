@@ -5,7 +5,7 @@ date: 27 September 2020 12:30:00 +0400
 categories: [AWS, ECS, ElasticSearch, Logstash]
 tags: [Logstash, ECS]
 published: true
-typora-root-url: ../public
+typora-root-url: ../../integratechfze.github.io
 ---
 
 In any environment that it is containerized, virtual or physical and whether it is running on On-Premise or on Cloud, logging is of paramount importance. Normally logs contain important metadata that can be used to identify issues and security risks inside our applications. Logs are the first place we look for, to troubleshoot any issues with our applications and services. If a business critical application goes down or is facing any problems, identifying the problem sooner can save the business from losing money. So it because very important that we should not only collect logs but also index them in a way that it should be very easy to search, analyze and even visualize. For this purpose there are a lot open source and commercial tools available such as Elastic Stack, Splunk, Datadog, etc. All you need is a good log processing tool that can ingest data from different sources and push them into your favourite SIEM solution, one such tool is the Elastic's Logstash.  
@@ -195,14 +195,17 @@ Before we can run our Logstash service we need to create a task definition and f
 
 <br/>
 
-![logstash-03](/img/posts/logstash-02.png)
+<img src="/public/img/posts/logstash-02.png" style="zoom:75%;" />
 
 <br/>
 
 ### Visualizing the Logs in Kibana  
 
 Once the Logstash service start it will push logs into our Amazon Elasticsearch cluster, as explained earlier Amazon Elasticsearch comes with build in integrated Kibana service. We can login to Kibana and view our indices under "Index Management".  
-<img src="/img/posts/logstash-03.png" alt="Logstash-kibana" style="zoom: 33%;" />  
+
+<br/>
+
+![](/public/img/posts/logstash-03.png)  
 
 <br/>
 
