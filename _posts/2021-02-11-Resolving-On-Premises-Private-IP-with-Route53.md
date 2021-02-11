@@ -37,6 +37,8 @@ Policies and routes required for the traffic between the AWS VPC’s and the on-
 <span style="display:block;text-align:center">![Create Title Here, Rajesh](/public/img/posts/rnair-dns-01.png)</span>    
 Once the VPN tunnel has been established, we need to create a private hosted zone, say, example.com and associate it to your VPC.  <br><br>
 
+<span style="display:block;text-align:center">![Create Title Here, Rajesh](/public/img/posts/rnair-dns-02.png)</span>
+
 An A record need to be created for the private hosted zone entry. For example, *test.example.com A 192.168.1.20*. This private hosted zone entry will be used to access the UAT URL from within the AWS VPC using the port configured in the on-premises application. (*https://test.example.com:8081*).   <br><br>
 
 Route 53 Resolver helps in the resolution of the host test.example.com to the local IP of the on-premises application server.   <br><br>
@@ -45,7 +47,12 @@ Route53 Resolver can be configured using Inbound Endpoint and Outbound Endpoint.
 
 In our case, we need to configure Outbound Endpoint to resolve the DNS queries. Internally, an Elastic Network Interface (ENI) is created in each availability zone in the VPC provided during creation of outbound endpoint.   <br><br>
 
+<span style="display:block;text-align:center">![Create Title Here, Rajesh](/public/img/posts/rnair-dns-03.png)</span>
+<br><br>
+<span style="display:block;text-align:center">![Create Title Here, Rajesh](/public/img/posts/rnair-dns-04.png)</span>
  After the Outbound Endpoint has been created, a rule for routing queries for on-premises hostnames has to set up by providing the target IP address and port. This rule created should include association of Outbound endpoint, private hosted zone A record (test.example.com) and Rule type as *Forward*.  <br><br>
+
+<span style="display:block;text-align:center">![Create Title Here, Rajesh](/public/img/posts/rnair-dns-05.png)</span>
 
  Once you have successfully created and saved the configuration, you should be able to access your application hosted in your on-premises server using private hosted zone http://test.example.com:8081 from the servers inside your AWS VPC.  <br><br>
 
