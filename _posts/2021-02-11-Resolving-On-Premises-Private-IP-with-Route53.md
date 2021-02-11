@@ -10,13 +10,13 @@ typora-root-url: ../../integratechfze.github.io
 
 ### **Customer Requirement**
 
-Due to operational requirements, the customer needed to migrate their UAT servers from AWS to On-premises. The development servers were already running on the on-premises environment.  
+Due to operational requirements, the customer needed to migrate their UAT servers from AWS to On-premises. The development servers were already running on the on-premises environment. <br> 
 
-Access to the dev servers was through port forwarding. Port 80/tcp and 443/tcp was forwarded to the dev server by the Fortigate firewall.  
+Access to the dev servers was through port forwarding. Port 80/tcp and 443/tcp was forwarded to the dev server by the Fortigate firewall. <br> 
 
-They wanted to deploy multiple UAT servers in house; however, the challenge was that they just had one fixed IP (static IP), assigned to the public interface of the firewall/router by the ISP. Since each UAT instance was a different virtual machine, it was not possible to forward ports 80/tcp and 443/tcp to multiple servers.  
+They wanted to deploy multiple UAT servers in house; however, the challenge was that they just had one fixed IP (static IP), assigned to the public interface of the firewall/router by the ISP. Since each UAT instance was a different virtual machine, it was not possible to forward ports 80/tcp and 443/tcp to multiple servers. <br> 
 
-Each customer needed to have an URL to access their server; and due to technical requirements, the port numbers needed to be 80/tcp or 443/tcp. If they had multiple static IP’s, they could have NAT’ed each public IP to a local internal IP.  
+Each customer needed to have an URL to access their server; and due to technical requirements, the port numbers needed to be 80/tcp or 443/tcp. If they had multiple static IP’s, they could have NAT’ed each public IP to a local internal IP. <br> 
 
 Since the customer domain was already on Route 53, we suggested that they leverage this advantage and use AWS Site to Site VPN to provide access to the private instances in their on-premises network.  
 
