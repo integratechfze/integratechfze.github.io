@@ -62,35 +62,34 @@ Nginx proxy is configured in an EC2 instance with Elastic IP (Amazon Linux AMI) 
 
 We need to install nginx first.
 
-`# sudo amazon-linux-extras install nginx1`
+```
+# sudo amazon-linux-extras install nginx1
+```
 
 We will now configure nginx. 
 
-`# sudo vim /etc/nginx/conf.d/awsroute53.conf`
+```
+# sudo vim /etc/nginx/conf.d/awsroute53.conf
+```
 
 The below lines need to be added to the configuration file.
+```
+server {   
 
-`server {`   
-
-​		`listen 80;`   
-
-​		`server_name awsroute53.com;`  
-
-​		 `location / {`     
-
-​			`proxy_pass  http://test.example.com:8081/;`   
-
-​		`}`  
-
-`}`  
-
+		listen 80;   
+		server_name awsroute53.com;  
+		location / {     
+			proxy_pass  http://test.example.com:8081/;   
+		}  
+}  
+```
  
 
 We need to enable and start nginx.
 ```
-`# sudo systemctl enable ngnix`
+# sudo systemctl enable ngnix
 
-`# sudo systemctl start ngnix`
+# sudo systemctl start ngnix
 ```
  
 
