@@ -34,6 +34,7 @@ Policies and routes required for the traffic between the AWS VPC’s and the on-
 
 5. Create appropriate policies and routes on the FortiGate on-premises firewall as well as on the AWS VPC to route traffic between AWS VPC and on-premises network.  
 
+![Create Title Here, Rajesh](/public/img/posts/rnair-dns-01.png)  
 Once the VPN tunnel has been established, we need to create a private hosted zone, say, example.com and associate it to your VPC.  <br><br>
 
 An A record need to be created for the private hosted zone entry. For example, *test.example.com A 192.168.1.20*. This private hosted zone entry will be used to access the UAT URL from within the AWS VPC using the port configured in the on-premises application. (*https://test.example.com:8081*).   <br><br>
