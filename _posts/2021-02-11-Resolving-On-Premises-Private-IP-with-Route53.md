@@ -1,5 +1,5 @@
 ---
-title: AWS DNS Resolver
+title: Resolving On-Premises Hosted Domain Names with AWS Route53 Resolver
 author: rajesh_nair
 date: 11 February 2021 11:07:00 +0400
 categories: [AWS, DNS, Resolver, On-Premises]
