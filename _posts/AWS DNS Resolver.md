@@ -1,5 +1,5 @@
 ---
-title: Building a high-performance decoupled CMS in AWS
+title: AWS DNS Resolver
 author: rajesh_nair
 date: 11 February 2021 11:07:00 +0400
 categories: [AWS, DNS, Resolver, On-Premises]
