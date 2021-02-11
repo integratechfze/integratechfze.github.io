@@ -10,7 +10,7 @@ typora-root-url: ../../integratechfze.github.io
 
 ### **Customer Requirement**
 
-Due to operational requirements, the customer needed to migrate their UAT servers from AWS to On-premises. The development servers were already running on the on-premises environment. <br> 
+Due to operational requirements, the customer needed to migrate their UAT servers from AWS to On-premises. The development servers were already running on the on-premises environment. <br><br> 
 
 Access to the dev servers was through port forwarding. Port 80/tcp and 443/tcp was forwarded to the dev server by the Fortigate firewall. <br> 
 
