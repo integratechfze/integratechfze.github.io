@@ -87,11 +87,11 @@ The below lines need to be added to the configuration file.
  
 
 We need to enable and start nginx.
-
+```
 `# sudo systemctl enable ngnix`
 
 `# sudo systemctl start ngnix`
-
+```
  
 
 Finally, you need to create an A record in the public hosted zone with the public IP of the nginx EC2 instance. 
